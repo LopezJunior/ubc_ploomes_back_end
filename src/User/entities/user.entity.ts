@@ -5,7 +5,7 @@ export class User {
     id?:string;
     name:string;
     email:string;
-    secretAnswer:string;
+    secretAnswer?:string;
     password:string;
     wallet:number;
     matches:number;
