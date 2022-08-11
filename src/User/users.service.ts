@@ -37,8 +37,14 @@ export class UsersService {
     // .catch(handleError);
   }
 
-  findAll() {
-    return `This action returns all users`;
+  filterByMoney() {
+    return this.prisma.user.findMany({
+      select:{
+        id:true,
+        name:true,
+        wallet:true
+      }
+    })
   }
 
   async findOne(id: string) {

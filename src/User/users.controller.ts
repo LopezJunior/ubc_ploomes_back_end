@@ -18,9 +18,9 @@ export class UsersController {
     return this.usersService.create(createUserDto);
   }
 
-  @Get()
+  @Get("FilterByMoney")
   findAll() {
-    return this.usersService.findAll();
+    return this.usersService.filterByMoney();
   }
 
   @UseGuards(AuthGuard())
