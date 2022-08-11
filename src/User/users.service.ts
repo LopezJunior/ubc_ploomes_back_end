@@ -1,11 +1,41 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
+import { Prisma } from '@prisma/client';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
+import * as bcrypt from 'bcrypt';
+import { PrismaService } from '../prisma/prisma.service';
 
 @Injectable()
 export class UsersService {
-  create(createUserDto: CreateUserDto) {
-    return 'This action adds a new user';
+  constructor(private readonly prisma: PrismaService) {}
+
+  async create(createUserDto: CreateUserDto) {
+
+    if (createUserDto.password != createUserDto.confirmPassword) {
+      throw new BadRequestException('As senhas informadas não são iguais.');
+    }
+
+    delete createUserDto.confirmPassword;
+
+    const data: Prisma.UserCreateInput = {
+      name: createUserDto.name,
+      email: createUserDto.email,
+      password: await bcrypt.hash(createUserDto.password, 10),
+    };
+
+    return this.prisma.user
+      .create({
+        data,
+        select: {
+          password: false,
+          id: true,
+          name: true,
+          email: true,
+          createdAt: true,
+          updatedAt: true,
+        },
+      })
+      // .catch(handleError);
   }
 
   findAll() {

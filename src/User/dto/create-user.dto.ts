@@ -27,5 +27,5 @@ password:string;
 @ApiProperty({
   example: 'Digite a senha novamente',
 })
-confirmpassword:string;
+confirmPassword:string;
 }
