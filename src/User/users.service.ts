@@ -3,9 +3,12 @@ import { Prisma } from '@prisma/client';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import * as bcrypt from 'bcrypt';
+import { PrismaService } from '../prisma/prisma.service';
 
 @Injectable()
 export class UsersService {
+  constructor(private readonly prisma: PrismaService) {}
+
   async create(createUserDto: CreateUserDto) {
 
     if (createUserDto.password != createUserDto.confirmPassword) {
@@ -15,7 +18,7 @@ export class UsersService {
     delete createUserDto.confirmPassword;
 
     const data: Prisma.UserCreateInput = {
-      name: createUserDto.name
+      name: createUserDto.name,
       email: createUserDto.email,
       password: await bcrypt.hash(createUserDto.password, 10),
     };

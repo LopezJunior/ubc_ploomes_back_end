@@ -12,7 +12,7 @@ export class UsersController {
   @Post('create')
   @ApiOperation({ summary: 'Criar um usuário' })
   create(@Body() createUserDto: CreateUserDto) {
-    return this.userService.create(createUserDto);
+    return this.usersService.create(createUserDto);
   }
 
   @Get()
