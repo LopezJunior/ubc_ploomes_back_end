@@ -47,6 +47,16 @@ export class UsersService {
     })
   }
 
+  filterByWins() {
+    return this.prisma.user.findMany({
+      select:{
+        id:true,
+        name:true,
+        wins:true
+      }
+    })
+  }
+
   async findOne(id: string) {
     const record = await this.prisma.user.findUnique({
       where: { id },

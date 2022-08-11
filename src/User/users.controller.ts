@@ -19,8 +19,13 @@ export class UsersController {
   }
 
   @Get("FilterByMoney")
-  findAll() {
+  filterByMoney() {
     return this.usersService.filterByMoney();
+  }
+
+  @Get("FilterByWins")
+  filterByWins() {
+    return this.usersService.filterByWins();
   }
 
   @UseGuards(AuthGuard())
