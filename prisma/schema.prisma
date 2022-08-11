@@ -14,12 +14,11 @@ model User{
   id String @id @default(uuid())
   name String @unique
   email String @unique
-  secretAnswer String
   password String
-  wallet Float
-  matches Int
-  wins Int
-  withdraws Int
+  wallet Float? @default(100)
+  matches Int? @default(0)
+  wins Int? @default(0)
+  withdraws Int? @default(0)
   cards Card[]
   room Room[]
   createdAt DateTime @default(now()) @map("created_at")
