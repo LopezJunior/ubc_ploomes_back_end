@@ -7,10 +7,10 @@ export class User {
     email:string;
     secretAnswer:string;
     password:string;
-    wallet:number;
-    matches:number;
-    wins:number;
-    withdraws:number;
+    wallet?:number;
+    matches?:number;
+    wins?:number;
+    withdraws?:number;
     //cards?:Card[];
     //room?:Room[];
     createdAt:Date;
