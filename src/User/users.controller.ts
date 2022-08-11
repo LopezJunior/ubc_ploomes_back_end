@@ -23,9 +23,12 @@ export class UsersController {
     return this.usersService.findAll();
   }
 
+  @UseGuards(AuthGuard())
+  @ApiBearerAuth()
   @Get(':id')
+  @ApiOperation({ summary: 'Visualizar um usuário pelo Id.' })
   findOne(@Param('id') id: string) {
-    return this.usersService.findOne(+id);
+    return this.usersService.findOne(id);
   }
 
   @UseGuards(AuthGuard())
