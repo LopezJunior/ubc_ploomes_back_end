@@ -4,13 +4,13 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import * as bcrypt from 'bcrypt';
 import { PrismaService } from '../prisma/prisma.service';
+import { User } from './entities/user.entity';
 
 @Injectable()
 export class UsersService {
   constructor(private readonly prisma: PrismaService) {}
 
   async create(createUserDto: CreateUserDto) {
-
     if (createUserDto.password != createUserDto.confirmPassword) {
       throw new BadRequestException('As senhas informadas não são iguais.');
     }
@@ -23,19 +23,18 @@ export class UsersService {
       password: await bcrypt.hash(createUserDto.password, 10),
     };
 
-    return this.prisma.user
-      .create({
-        data,
-        select: {
-          password: false,
-          id: true,
-          name: true,
-          email: true,
-          createdAt: true,
-          updatedAt: true,
-        },
-      })
-      // .catch(handleError);
+    return this.prisma.user.create({
+      data,
+      select: {
+        password: false,
+        id: true,
+        name: true,
+        email: true,
+        createdAt: true,
+        updatedAt: true,
+      },
+    });
+    // .catch(handleError);
   }
 
   findAll() {
@@ -46,11 +45,32 @@ export class UsersService {
     return `This action returns a #${id} user`;
   }
 
-  update(id: number, updateUserDto: UpdateUserDto) {
-    return `This action updates a #${id} user`;
+  async update(user: User, updateUserDto: UpdateUserDto) {
+    if (updateUserDto.password) {
+      if (updateUserDto.password != updateUserDto.confirmPassword) {
+        throw new BadRequestException('As senhas informadas não são iguais.');
+      }
+    }
+
+    delete updateUserDto.confirmPassword;
+
+    const data: Partial<User> = { ...updateUserDto };
+
+    if (data.password) {
+      data.password = await bcrypt.hash(data.password, 10);
+    }
+    const id = user.id;
+
+    return this.prisma.user.update({
+      where: { id },
+      data,
+      select: { id: true, name: true, password: false },
+    });
+    // .catch(handleError);
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} user`;
+  async delete(user: User) {
+    const id = user.id;
+    return await this.prisma.user.delete({ where: { id } });
   }
 }
