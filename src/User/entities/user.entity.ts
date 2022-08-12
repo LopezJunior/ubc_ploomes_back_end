@@ -8,7 +8,7 @@ export class User {
   password:string;
   wallet?:number;
   matches?:number;
-  wins?:Number;
+  wins?:number;
   withdraws?:number;
   //cards:Card[];
   //room?: Room;
