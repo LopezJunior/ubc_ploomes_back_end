@@ -20,30 +20,31 @@ model User{
   wins Int? @default(0)
   withdraws Int? @default(0)
   cards Card[]
-  room Room[]
+  room Room? @relation(fields: [roomID],references: [id])
+  roomID String?
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 }
 
 model Room{
   id String @id @default(uuid())
-  number Int
-  user User @relation(fields: [userID],references: [id])
-  userID String
-  maxCards Int
-  limitPrizeDraw Int
-  limitRecord Int
+  number Int?
+  userID User []
+  maxCards Int? @default(2)
+  limitPrizeDraw Int? @default(50)
+  limitRecord Int? @default(6)
+  limitUsers Int? @default(1)
+  price Float?
   //rules enum
-  limitUsers Int
-  history Int[] 
-  frequency Int
-  createdAt DateTime @default(now()) @map("created_at")
-  updatedAt DateTime @updatedAt @map("updated_at")
+  historic Int[] 
+  frequency Int? @default(10)
+  createdAt DateTime? @default(now()) @map("created_at")
+  updatedAt DateTime? @updatedAt @map("updated_at")
 }
 
 model Card{
   id String @id @default(uuid())
-  //matriz Int[][]
+  matriz Int[] 
   user User @relation(fields: [userID],references: [id])
   userID String
   createdAt DateTime @default(now()) @map("created_at")
