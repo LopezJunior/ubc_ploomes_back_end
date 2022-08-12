@@ -18,9 +18,14 @@ export class UsersController {
     return this.usersService.create(createUserDto);
   }
 
-  @Get()
-  findAll() {
-    return this.usersService.findAll();
+  @Get("ranking/filterByMoney")
+  filterByMoney() {
+    return this.usersService.filterByMoney();
+  }
+
+  @Get("ranking/filterByWins")
+  filterByWins() {
+    return this.usersService.filterByWins();
   }
 
   @UseGuards(AuthGuard())

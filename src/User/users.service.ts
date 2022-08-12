@@ -37,8 +37,36 @@ export class UsersService {
     // .catch(handleError);
   }
 
-  findAll() {
-    return `This action returns all users`;
+  async filterByMoney() {
+    const richest_list = await this.prisma.user.findMany({
+      select:{
+        id:true,
+        name:true,
+        wallet:true
+      }
+    })
+
+    richest_list.sort((a,b) => {
+      return a.wallet - b.wallet
+      });
+
+    return richest_list;
+  }
+
+  async filterByWins() {
+    const winners_list = await this.prisma.user.findMany({
+      select:{
+        id:true,
+        name:true,
+        wins:true
+      }
+    })
+
+    winners_list.sort((a,b) => {
+      return a.wins - b.wins
+      });
+
+    return winners_list;
   }
 
   async findOne(id: string) {
