@@ -2,16 +2,16 @@
 //import { Room } from "src/Room/entities/room.entity";
 
 export class User {
-    id?:string;
-    name:string;
-    email:string;
-    password:string;
-    wallet?:number;
-    matches?:number;
-    wins?:number;
-    withdraws?:number;
-    //cards?:Card[];
-    //room?:Room[];
-    createdAt:Date;
-    updatedAt:Date;
-  }
+  id?: string;
+  number?:number;  
+  userID: User [];  
+  maxCards?:number;  
+  limitPrizeDraw?:number;  
+  limitRecord?:number;  
+  //rules: enum;  
+  limitUsers?:number;  
+  historic: number [];  
+  frequency?: number;  
+  createdAt?: Date;
+  updatedAt?: Date;
+}
