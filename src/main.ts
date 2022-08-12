@@ -9,10 +9,11 @@ async function bootstrap() {
   app.useGlobalPipes(new ValidationPipe());
 
   const config = new DocumentBuilder()
-    .setTitle('Api-UBC_Bingo')
+    .setTitle('Api-UBC-Bingo')
     .setDescription('Jogo de bingo online com temática do UFC!')
     .setVersion('1.0.0')
     .addTag('status')
+    .addTag('Auth')
     .addTag('User')
 
     .addBearerAuth()
