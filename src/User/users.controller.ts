@@ -7,7 +7,7 @@ import { AuthGuard } from '@nestjs/passport';
 import { User } from './entities/user.entity';
 import { LoggedUser } from 'src/auth/logged-user.decorator';
 
-@ApiTags('Users')
+@ApiTags('User')
 @Controller()
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
