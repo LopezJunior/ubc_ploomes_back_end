@@ -23,7 +23,7 @@ export class UsersController {
     return this.usersService.filterByMoney();
   }
 
-  @Get("FilterByWins")
+  @Get("ranking/filterByWins")
   filterByWins() {
     return this.usersService.filterByWins();
   }
