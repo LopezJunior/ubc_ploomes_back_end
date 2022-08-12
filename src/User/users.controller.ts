@@ -18,7 +18,7 @@ export class UsersController {
     return this.usersService.create(createUserDto);
   }
 
-  @Get("FilterByMoney")
+  @Get("ranking/filterByMoney")
   filterByMoney() {
     return this.usersService.filterByMoney();
   }
