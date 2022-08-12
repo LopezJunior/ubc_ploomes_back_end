@@ -115,7 +115,7 @@ export class UsersService {
     return this.prisma.user.update({
       where: { id },
       data,
-      select: { id: true, name: true, password: false },
+      select: { id: true, name: true, password: false }
     });
     // .catch(handleError);
   }
