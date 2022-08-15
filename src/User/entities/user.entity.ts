@@ -11,7 +11,7 @@ export class User {
   wins?:number;
   withdraws?:number;
   //cards:Card[];
-  room?: Room;
+  roomID?: string;
   createdAt?: Date;
   updatedAt?: Date;
 }
