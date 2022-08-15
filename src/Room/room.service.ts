@@ -27,8 +27,8 @@ export class RoomService {
     return `This action returns all folderName`;
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} folderName`;
+  findOne(id: string) {
+    return this.prisma.room.findUnique({where:{id:id}});
   }
 
   update(id: number, updateRoomDto: UpdateRoomDto) {
