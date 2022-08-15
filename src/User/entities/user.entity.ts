@@ -1,5 +1,5 @@
+import { Room } from "src/Room/entities/room-entity";
 //import { Card } from "src/Card/entities/card.entity";
-//import { Room } from "src/Room/entities/room.entity";
 
 export class User {
   id?: string;
@@ -11,7 +11,7 @@ export class User {
   wins?:number;
   withdraws?:number;
   //cards:Card[];
-  //room?: Room;
+  roomID?: string;
   createdAt?: Date;
   updatedAt?: Date;
 }
