@@ -37,8 +37,7 @@ export class UsersService {
         createdAt: true,
         updatedAt: true,
       },
-    });
-    // .catch(handleError);
+    })//.catch(handleError);
   }
 
   async filterByMoney() {
