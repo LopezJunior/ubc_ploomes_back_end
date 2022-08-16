@@ -4,8 +4,7 @@
 
 export function createCard(bingo: number[]) {
     let b = [4],i = [4],n = [4],g= [4] ,o = [4];
-   
-
+    
     for(let x=0;x<4;x++){
         b.push(Math.random() * (15 - 1) + 1);
     };
