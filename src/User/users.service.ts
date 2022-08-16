@@ -1,4 +1,8 @@
-import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { Prisma } from '@prisma/client';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
@@ -33,12 +37,39 @@ export class UsersService {
         createdAt: true,
         updatedAt: true,
       },
-    });
-    // .catch(handleError);
+    })//.catch(handleError);
   }
 
-  findAll() {
-    return `This action returns all users`;
+  async filterByMoney() {
+    const richest_list = await this.prisma.user.findMany({
+      select:{
+        id:true,
+        name:true,
+        wallet:true
+      }
+    })
+
+    richest_list.sort((a,b) => {
+      return a.wallet - b.wallet
+      });
+
+    return richest_list;
+  }
+
+  async filterByWins() {
+    const winners_list = await this.prisma.user.findMany({
+      select:{
+        id:true,
+        name:true,
+        wins:true
+      }
+    })
+
+    winners_list.sort((a,b) => {
+      return a.wins - b.wins
+      });
+
+    return winners_list;
   }
 
   async findOne(id: string) {
@@ -55,6 +86,13 @@ export class UsersService {
       throw new NotFoundException(`Registro com id '${id}' não encontrado.`);
     }
     return record;
+  }
+
+  async profile(user: User) {
+    const id = user.id;
+    return await this.prisma.user.findUnique({
+      where: { id },
+    });
   }
 
   async update(user: User, updateUserDto: UpdateUserDto) {
@@ -76,7 +114,7 @@ export class UsersService {
     return this.prisma.user.update({
       where: { id },
       data,
-      select: { id: true, name: true, password: false },
+      select: { id: true, name: true, password: false }
     });
     // .catch(handleError);
   }

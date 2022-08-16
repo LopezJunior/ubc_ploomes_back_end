@@ -8,33 +8,49 @@ import { AuthGuard } from '@nestjs/passport';
 import { User } from './entities/user.entity';
 import { LoggedUser } from 'src/auth/logged-user.decorator';
 
-@ApiTags('Users')
-@Controller('users')
+@ApiTags('User')
+@Controller()
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
-  @Post('create')
+  @Post('/login/register')
   @ApiOperation({ summary: 'Criar um usuário' })
   create(@Body() createUserDto: CreateUserDto) {
     return this.usersService.create(createUserDto);
   }
 
-  @Get()
-  findAll() {
-    return this.usersService.findAll();
+  @Get("ranking/filterByMoney")
+  filterByMoney() {
+    return this.usersService.filterByMoney();
+  }
+
+  @Get("ranking/filterByWins")
+  filterByWins() {
+    return this.usersService.filterByWins();
   }
 
   @UseGuards(AuthGuard())
   @ApiBearerAuth()
-  @Get(':id')
+  @Get('/ranking/user/:id')
   @ApiOperation({ summary: 'Visualizar um usuário pelo Id.' })
   findOne(@Param('id') id: string) {
     return this.usersService.findOne(id);
   }
+  
+  @UseGuards(AuthGuard())
+  
+  @ApiBearerAuth()
+  @Get('/myAccount')
+  @ApiOperation({
+    summary: 'Retorna o perfil do usuário autenticado no momento',
+  })
+  profile(@LoggedUser() user: User) {
+    return this.usersService.profile(user);
+  }
 
   @UseGuards(AuthGuard())
   @ApiBearerAuth()
-  @Patch(':id')
+  @Patch('/myAccount')
   @ApiOperation({ summary: 'Editar dados do usuário logado' })
   update(@LoggedUser() user: User, @Body() updateUserDto: UpdateUserDto) {
     updateUserDto.id = user.id;
@@ -44,7 +60,7 @@ export class UsersController {
   @UseGuards(AuthGuard())
   @ApiBearerAuth()
   @HttpCode(HttpStatus.NO_CONTENT)
-  @Delete(':id')
+  @Delete('/myAccount')
   @ApiOperation({
     summary: 'Remove usuário logado.',
   })
