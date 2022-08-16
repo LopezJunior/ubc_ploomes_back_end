@@ -5,7 +5,7 @@ import { UsersController } from './users.controller';
 import { PassportModule } from '@nestjs/passport';
 
 @Module({
-  imports: [PrismaModule,PassportModule.register({ defaultStrategy: 'jwt' })],
+  imports: [PrismaModule, PassportModule.register({ defaultStrategy: 'jwt' })],
   controllers: [UsersController],
   providers: [UsersService],
 })

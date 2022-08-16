@@ -30,7 +30,7 @@ export class AuthService {
 
     return {
       token: this.jwtService.sign({ email }),
-      user:undefined,
+      user: undefined,
     };
   }
 }
