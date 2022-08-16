@@ -6,21 +6,21 @@ import { UpdateRoomDto } from './dto/update-room.dto';
 
 @Injectable()
 export class RoomService {
-  constructor(private readonly prisma:PrismaService){}
+  constructor(private readonly prisma: PrismaService) {}
 
-  create(dto:CreateRoomDto) {
+  create(dto: CreateRoomDto) {
     const data: Prisma.RoomCreateInput = {
-      number:dto.number,
-      maxCards:dto.maxCards,
-      limitPrizeDraw:dto.limitPrizeDraw,
-      limitRecord:dto.limitRecord,
-      limitUsers:dto.limitUsers,
-      price:dto.price,
-      historic:dto.historic, 
-      frequency:dto.frequency
-    }   
-    
-    return this.prisma.room.create({data})//.catch(handleError);
+      number: dto.number,
+      maxCards: dto.maxCards,
+      limitPrizeDraw: dto.limitPrizeDraw,
+      limitRecord: dto.limitRecord,
+      limitUsers: dto.limitUsers,
+      price: dto.price,
+      historic: dto.historic,
+      frequency: dto.frequency,
+    };
+
+    return this.prisma.room.create({ data }); //.catch(handleError);
   }
 
   findAll() {
@@ -28,7 +28,7 @@ export class RoomService {
   }
 
   findOne(id: string) {
-    return this.prisma.room.findUnique({where:{id:id}});
+    return this.prisma.room.findUnique({ where: { id: id } });
   }
 
   update(id: number, updateRoomDto: UpdateRoomDto) {
