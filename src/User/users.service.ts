@@ -37,37 +37,37 @@ export class UsersService {
         createdAt: true,
         updatedAt: true,
       },
-    })//.catch(handleError);
+    }); //.catch(handleError);
   }
 
   async filterByMoney() {
     const richest_list = await this.prisma.user.findMany({
-      select:{
-        id:true,
-        name:true,
-        wallet:true
-      }
-    })
+      select: {
+        id: true,
+        name: true,
+        wallet: true,
+      },
+    });
 
-    richest_list.sort((a,b) => {
-      return a.wallet - b.wallet
-      });
+    richest_list.sort((a, b) => {
+      return a.wallet - b.wallet;
+    });
 
     return richest_list;
   }
 
   async filterByWins() {
     const winners_list = await this.prisma.user.findMany({
-      select:{
-        id:true,
-        name:true,
-        wins:true
-      }
-    })
+      select: {
+        id: true,
+        name: true,
+        wins: true,
+      },
+    });
 
-    winners_list.sort((a,b) => {
-      return a.wins - b.wins
-      });
+    winners_list.sort((a, b) => {
+      return a.wins - b.wins;
+    });
 
     return winners_list;
   }
@@ -114,7 +114,7 @@ export class UsersService {
     return this.prisma.user.update({
       where: { id },
       data,
-      select: { id: true, name: true, password: false }
+      select: { id: true, name: true, password: false },
     });
     // .catch(handleError);
   }

@@ -1,4 +1,12 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+} from '@nestjs/common';
 import { RoomService } from './room.service';
 import { CreateRoomDto } from './dto/create-room.dto';
 import { UpdateRoomDto } from './dto/update-room.dto';
@@ -7,7 +15,7 @@ import { UpdateRoomDto } from './dto/update-room.dto';
 export class RoomController {
   constructor(private readonly RoomService: RoomService) {}
 
-  @Post("/Start")
+  @Post('/Start')
   create(@Body() dto: CreateRoomDto) {
     return this.RoomService.create(dto);
   }
