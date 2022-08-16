@@ -2,51 +2,60 @@
 //sorteio de 5 listas (B, I, N, G, O) e organização numa lista maior, 
 //sem armazenar números repetidos.
 
-export function createCard(bingo: number[]) {
-    let b = [4],i = [4],n = [4],g= [4] ,o = [4];
+
+    let b=[4],i = [4],n = [4],g= [4] ,o = [4];
+    let bingo = [];
     
     for(let x=0;x<4;x++){
-        b.push(Math.random() * (15 - 1) + 1);
+        b[x] = Math.floor(Math.random() * (15 - 1) + 1);
     };
 
     for(let x=0;x<4;x++){
-        i.push(Math.random() * (30 - 16) + 16);
+        i[x] = Math.floor(Math.random() * (30 - 16) + 16);
     };
 
     for(let x=0;x<4;x++){
-        n.push(Math.random() * (45 - 31) + 31);
+        n[x] = Math.floor(Math.random() * (45 - 31) + 31);
     };
 
     for(let x=0;x<4;x++){
-        g.push(Math.random() * (60 - 46) + 46);
+        g[x] =  Math.floor(Math.random() * (60 - 46) + 46);
     };
 
     for(let x=0;x<4;x++){
-        o.push(Math.random() * (75 - 61) + 61);
+        o[x] = Math.floor(Math.random() * (75 - 61) + 61);
     };
 
     for(let x=0;x<4;x++){
-        bingo.push(b[x]);
+        bingo[x] = b[x];
     };
 
-    for(let x=0;x<4;x++){
-        bingo.push(i[x]);
+    for(let x=4;x<8;x++){
+        bingo[x] = i[x];
     };
 
-    for(let x=0;x<4;x++){
-        bingo.push(n[x]);
+    for(let x=8;x<12;x++){
+        bingo[x] = n[x];
     };
 
-    for(let x=0;x<4;x++){
-        bingo.push(g[x]);
+    for(let x=12;x<16;x++){
+        bingo[x] = g[x];
     };
 
-    for(let x=0;x<4;x++){
-        bingo.push(o[x]);
+    for(let x=16;x<20;x++){
+        bingo[x] = o[x];
     };
 
-    return bingo;
-}
+    console.log(`b = ${b}`);
+    console.log(`i = ${i}`);
+    console.log(`n = ${n}`);
+    console.log(`g = ${g}`);
+    console.log(`o = ${o}`);
+    console.log('-------------------------');
+    console.log(bingo);
+
+
+
 
 
 
