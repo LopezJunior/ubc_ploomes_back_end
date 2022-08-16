@@ -1,4 +1,15 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, HttpCode, HttpStatus } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+  UseGuards,
+  HttpCode,
+  HttpStatus,
+} from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
@@ -18,12 +29,12 @@ export class UsersController {
     return this.usersService.create(createUserDto);
   }
 
-  @Get("ranking/filterByMoney")
+  @Get('ranking/filterByMoney')
   filterByMoney() {
     return this.usersService.filterByMoney();
   }
 
-  @Get("ranking/filterByWins")
+  @Get('ranking/filterByWins')
   filterByWins() {
     return this.usersService.filterByWins();
   }
@@ -35,9 +46,8 @@ export class UsersController {
   findOne(@Param('id') id: string) {
     return this.usersService.findOne(id);
   }
-  
+
   @UseGuards(AuthGuard())
-  
   @ApiBearerAuth()
   @Get('/myAccount')
   @ApiOperation({
