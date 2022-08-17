@@ -14,7 +14,7 @@ export async function Award(user:User,award:number,cardValue:number){
     return await this.PrismaService.user.update({
         where:{id:user.id},
         data:{
-            wallet: user
+            wallet: //user.waller + finalAward
 
         }
     }); 
