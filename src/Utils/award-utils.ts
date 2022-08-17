@@ -8,14 +8,13 @@ import { PrismaService } from "src/prisma/prisma.service";
 
 export async function Award(user:User,award:number,cardValue:number){
 
-    //const priceCards = cardValue + user.cards.lenght
+    //const priceCards = cardValue * user.cards.lenght
     //const finalAward = award - priceCards; 
 
     return await this.PrismaService.user.update({
         where:{id:user.id},
         data:{
             wallet: //user.waller + finalAward
-
         }
     }); 
     
