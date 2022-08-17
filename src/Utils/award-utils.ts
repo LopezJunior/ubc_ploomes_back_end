@@ -2,8 +2,9 @@ import { User } from "src/User/entities/user.entity";
 import { PrismaService } from "src/prisma/prisma.service";
 
 
-//Função que recebe 3 parâmetros, o vencedor, o número de cartelas(custo de 10pt por cartela) e 
-// Atribuir o prêmio da partida - o desconto das cartelas
+//Função que recebe 3 parâmetros, o vencedor, 
+//o valor do prêmio e o valor unitário do card. 
+// Prêmio: Valor do prêmio - o valor da cartela x a quantidade de cartelas.
 
 export async function Award(user:User,award:number,cardValue:number){
 
