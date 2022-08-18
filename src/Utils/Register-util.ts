@@ -1,4 +1,4 @@
-// function Register () {
+// function RecordNumbers () {
 //     const register = []
 
 //     io.on('timer', data => {
