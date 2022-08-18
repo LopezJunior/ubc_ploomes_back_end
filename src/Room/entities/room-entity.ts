@@ -3,7 +3,7 @@ import { User } from 'src/User/entities/user.entity';
 export class Room {
   id?: string;
   number: number;
-  userID?: User[];
+  users?: User[];
   maxCards?: number;
   limitPrizeDraw?: number;
   limitRecord?: number;
