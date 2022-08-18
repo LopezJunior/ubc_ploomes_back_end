@@ -81,4 +81,3 @@ export function CreateCard(card:number[]) {
 }
 
 
-
