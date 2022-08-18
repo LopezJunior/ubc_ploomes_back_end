@@ -1,6 +1,7 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Redirect } from '@nestjs/common';
 import { Prisma } from '@prisma/client';
 import { PrismaService } from 'src/prisma/prisma.service';
+import { User } from 'src/User/entities/user.entity';
 import { CreateRoomDto } from './dto/create-room.dto';
 import { UpdateRoomDto } from './dto/update-room.dto';
 
@@ -35,7 +36,8 @@ export class RoomService {
     return `This action updates a #${id} folderName`;
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} folderName`;
+  async delete(id: string) {
+    await this.prisma.room.delete({where: {id}});
+    return {message: 'Você saiu da partida!'};
   }
 }
