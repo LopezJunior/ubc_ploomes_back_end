@@ -2,7 +2,7 @@
 //sorteio de 5 listas (B, I, N, G, O) e organização numa lista maior, 
 //Não armazenar números repetidos.
 
-export function CreateCard(bingo:number[]) {
+export function CreateCard(card:number[]) {
 
     let b=[],i = [],n = [],g= [] ,o = [];
 
@@ -58,26 +58,26 @@ export function CreateCard(bingo:number[]) {
     };
 
     for(let x=0;x<5;x++){
-        bingo.push(b[x])
+        card.push(b[x])
     }
 
     for(let x=0;x<5;x++){
-        bingo.push(i[x])
+        card.push(i[x])
     }
 
     for(let x=0;x<5;x++){
-        bingo.push(n[x])
+        card.push(n[x])
     }
 
     for(let x=0;x<5;x++){
-        bingo.push(g[x])
+        card.push(g[x])
     }
 
     for(let x=0;x<5;x++){
-        bingo.push(o[x])
+        card.push(o[x])
     }
 
-    return bingo;
+    return card;
 }
 
 
