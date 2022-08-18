@@ -34,8 +34,6 @@ function CheckLines(indicesBolasMarcadas) {
   do {
     Check(indicesBolasMarcadas, indexLine);
 
-    console.log(control);
-    console.log(indexLine);
     if (Check(indicesBolasMarcadas, indexLine)) {
       return true;
     }
@@ -56,8 +54,6 @@ function CheckCollumns(indicesBolasMarcadas) {
   do {
     Check(indicesBolasMarcadas, indexLine);
 
-    console.log(control);
-    console.log(indexLine);
     if (Check(indicesBolasMarcadas, indexLine)) {
       return true;
     }
@@ -78,8 +74,6 @@ function CheckDiagonals(indicesBolasMarcadas) {
   do {
     Check(indicesBolasMarcadas, indexLine);
 
-    console.log(control);
-    console.log(indexLine);
     if (Check(indicesBolasMarcadas, indexLine)) {
       return true;
     }
