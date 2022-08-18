@@ -58,7 +58,7 @@ export function CreateCard(card: number[]) {
       o.push(y);
     }
   }
-
+  
   for (let x = 0; x < 5; x++) {
     card.push(b[x]);
   }
