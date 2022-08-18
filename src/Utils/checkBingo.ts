@@ -1,24 +1,99 @@
-//Função que cruza registro com bolas marcadas: Verifica se os números marcados estão de acordo com as bolas já sorteadas e remove os que não estiverem.
+//CheckLines: função que checa se a linha está marcada,. índices de exemplo na cartela (0, 5, 10, 15, 20)
 
-//let card = [9, 11, 13,  10,  8, 27, 30, 28, 17, 20, 37, 42, 35, 44, 34, 59, 60, 58, 47, 48, 71, 74, 72, 64, 75];
+// let indicesBolasMarcadas = [0, 1, 6, 11, 12, 16, 18, 21, 24]; //**Exemplo. vem da função crossMap
 
-let prizeDraw = [
-  3, 5, 7, 8, 9, 11, 15, 22, 25, 28, 31, 33, 34, 35, 41, 47, 48, 50, 51, 52, 54,
-  55, 60, 61, 63, 64, 66, 71, 73, 75,
-];
+// let bingo = CheckBingo(indicesBolasMarcadas);
 
-let bolasMarcadas = [3, 5, 7, 8, 9, 11, 15, 22, 25, 28, 31, 33, 34, 35, 41, 53];
+// console.log(bingo);
 
-let x = Compare(prizeDraw, bolasMarcadas);
-
-function Compare(prizeDraw, bolasMarcadas) {
-  let acertos = [];
-  for (let i = 0; i < bolasMarcadas.length; i++) {
-    if (prizeDraw.indexOf(bolasMarcadas[i]) > -1) {
-      acertos.push(bolasMarcadas[i]);
-    }
+export function CheckBingo(indicesBolasMarcadas) {
+  if(indicesBolasMarcadas < 5){
+    return false
   }
-  return acertos;
+  CheckLines(indicesBolasMarcadas);
+  if (CheckLines(indicesBolasMarcadas)) {
+    return true;
+  }
+  CheckDiagonals(indicesBolasMarcadas);
+  if (CheckDiagonals(indicesBolasMarcadas)) {
+    return true;
+  }
+  CheckCollumns(indicesBolasMarcadas);
+  if (CheckCollumns(indicesBolasMarcadas)) {
+    return true;
+  } else {
+    return false;
+  }
 }
 
-console.log('Você acertou ' + x.length + ' números: ', x);
+function CheckLines(indicesBolasMarcadas) {
+  let control = 1;
+
+  let indexLine = [0, 5, 10, 15, 20];
+
+  do {
+    Check(indicesBolasMarcadas, indexLine);
+
+    if (Check(indicesBolasMarcadas, indexLine)) {
+      return true;
+    }
+
+    for (let x = 0; x < 5; x++) {
+      indexLine[x]++;
+    }
+
+    control++;
+  } while (control <= 5);
+}
+
+function CheckCollumns(indicesBolasMarcadas) {
+  let control = 1;
+
+  let indexLine = [0, 1, 2, 3, 4];
+
+  do {
+    Check(indicesBolasMarcadas, indexLine);
+
+    if (Check(indicesBolasMarcadas, indexLine)) {
+      return true;
+    }
+
+    for (let x = 0; x < 5; x++) {
+      indexLine[x] += 5;
+    }
+
+    control++;
+  } while (control <= 5);
+}
+
+function CheckDiagonals(indicesBolasMarcadas) {
+  let control = 1;
+
+  let indexLine = [0, 6, 12, 18, 24];
+
+  do {
+    Check(indicesBolasMarcadas, indexLine);
+
+    if (Check(indicesBolasMarcadas, indexLine)) {
+      return true;
+    }
+
+    indexLine = [4, 8, 12, 16, 20];
+
+    control++;
+  } while (control <= 5);
+}
+
+function Check(indicesBolasMarcadas, indexLine) {
+  let bingo = [];
+
+  indicesBolasMarcadas.forEach((index) => {
+    if (indexLine.indexOf(index) > -1) {
+      bingo.push(index);
+    }
+  });
+
+  if (bingo.length === 5) {
+    return true;
+  }
+}

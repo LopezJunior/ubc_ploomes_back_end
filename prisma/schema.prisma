@@ -44,7 +44,7 @@ model Room{
 
 model Card{
   id String @id @default(uuid())
-  matriz Int[] 
+  vetor Int[] 
   user User @relation(fields: [userID],references: [id])
   userID String
   createdAt DateTime @default(now()) @map("created_at")
