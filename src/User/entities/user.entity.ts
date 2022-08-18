@@ -1,4 +1,4 @@
-//import { Card } from "src/Card/entities/card.entity";
+import { Card } from 'src/Card/entities/card.entity';
 
 export class User {
   id?: string;
@@ -9,7 +9,7 @@ export class User {
   matches?: number;
   wins?: number;
   withdraws?: number;
-  //cards:Card[];
+  cards: Card[];
   roomID?: string;
   createdAt?: Date;
   updatedAt?: Date;
