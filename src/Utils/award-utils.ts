@@ -16,12 +16,8 @@ export async function Award(user:User,room:Room){
         let recordUser = await this.PrismaService.user.findUnique({where:{id:userIdList[0]}});
         totalCards += recordUser.cards.length; 
     }
-
-    const data: Partial<User> = { ...UpdateUserDto};
    
     if(countUsers<2){
-      const userPayCards = user.cards.length * room.price;
-
       await this.PrismaService.user.update({
         where: {
           id:user.id,
