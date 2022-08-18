@@ -2,6 +2,7 @@ import { Injectable, Redirect } from '@nestjs/common';
 import { Prisma } from '@prisma/client';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { User } from 'src/User/entities/user.entity';
+import { handleError } from 'src/Utils/handleError.utils';
 import { CreateRoomDto } from './dto/create-room.dto';
 import { UpdateRoomDto } from './dto/update-room.dto';
 
@@ -21,7 +22,7 @@ export class RoomService {
       frequency: dto.frequency,
     };
 
-    return this.prisma.room.create({ data }); //.catch(handleError);
+    return this.prisma.room.create({ data }).catch(handleError);
   }
 
   findAll() {
@@ -37,7 +38,7 @@ export class RoomService {
   }
 
   async delete(id: string) {
-    await this.prisma.room.delete({where: {id}});
+    await this.prisma.room.delete({where: {id}}).catch(handleError);
     return {message: 'Você saiu da partida!'};
   }
 }
