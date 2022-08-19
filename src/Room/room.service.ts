@@ -28,7 +28,7 @@ export class RoomService {
   }
 
   async resetRoom(id: string, userID: string) {
-    await this.prisma.card.deleteMany({where: {id: userID}});
+    await this.prisma.card.deleteMany({ where: { id: userID } });
 
     const data = await this.prisma.room.findUnique({
       where: { id: id },
