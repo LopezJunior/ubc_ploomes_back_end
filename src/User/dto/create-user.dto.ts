@@ -6,7 +6,7 @@ export class CreateUserDto {
   @IsNotEmpty()
   @ApiProperty({
     description:"Nome do usuárip",
-    example: 'Equipe 4'
+    example: 'BlueEdtech'
   })
   name: string;
 
@@ -14,7 +14,7 @@ export class CreateUserDto {
   @IsEmail()
   @ApiProperty({
     description:"Email do usuário",
-    example: 'equipe4@gmail.com'
+    example: 'blueedtech@blue.com'
   })
   email: string;
 
@@ -22,14 +22,14 @@ export class CreateUserDto {
   @IsNotEmpty()
   @ApiProperty({
     description:"Senha do usuário",
-    example: 'equipe4@123'
+    example: 'Blue@123'
   })
   password: string;
 
   @IsString()
   @IsNotEmpty()
   @ApiProperty({
-    example: 'equipe4@123'
+    example: 'Blue@123'
   })
   confirmPassword: string;
 }
