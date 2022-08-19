@@ -1,9 +1,10 @@
-import { Injectable } from '@nestjs/common';
-import { Prisma } from '@prisma/client';
+import { Injectable, Param } from '@nestjs/common';
+import { Prisma, User } from '@prisma/client';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { handleError } from 'src/Utils/handleError.utils';
 import { CreateRoomDto } from './dto/create-room.dto';
 import { UpdateRoomDto } from './dto/update-room.dto';
+import { UsersService } from 'src/User/users.service';
 
 @Injectable()
 export class RoomService {
@@ -24,6 +25,30 @@ export class RoomService {
 
   findAll() {
     return `This action returns all folderName`;
+  }
+
+  async resetRoom(id: string, userID: string) {
+    await this.prisma.card.deleteMany({where: {id: userID}});
+
+    const data = await this.prisma.room.findUnique({
+      where: { id: id },
+      select: {
+        number: true,
+        maxCards: true,
+        limitPrizeDraw: true,
+        limitRecord: true,
+        limitUsers: true,
+        price: true,
+        frequency: true,
+        users: true,
+      },
+    });
+
+    await this.prisma.room.delete({ where: { id: id } });
+
+    this.create(data);
+
+    return data;
   }
 
   findOne(id: string) {
