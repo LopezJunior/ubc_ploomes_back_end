@@ -1,8 +1,5 @@
-import { User } from 'src/User/entities/user.entity';
 import { Room } from 'src/Room/entities/room-entity';
-import { Prisma } from '@prisma/client';
-import { PrismaService } from 'src/prisma/prisma.service';
-import { UpdateUserDto } from 'src/User/dto/update-user.dto';
+import { User } from 'src/User/entities/user.entity';
 
 export async function Award(user: User, room: Room) {
   const countUsers = room.users.length; // numero de jogadores
