@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { Prisma } from '@prisma/client';
+import { Prisma, User } from '@prisma/client';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { CreateRoomDto } from './dto/create-room.dto';
 import { UpdateRoomDto } from './dto/update-room.dto';
@@ -34,6 +34,26 @@ export class RoomService {
   update(id: number, updateRoomDto: UpdateRoomDto) {
     return `This action updates a #${id} folderName`;
   }
+
+  async resetRoom(id:string,user:User) {
+
+    const room = await this.prisma.room.findUnique({where:{id:id}});
+
+    let refreshHistoric=[];
+    let ref = 2;
+  
+    const data: Prisma.RoomUpdateInput = {
+      historic:ref,
+      users:{
+        connect:{
+
+        }
+      }
+    };
+
+    return this.prisma.room.update({where:{id:id},data})
+  }
+  
 
   remove(id: number) {
     return `This action removes a #${id} folderName`;

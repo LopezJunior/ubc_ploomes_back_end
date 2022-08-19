@@ -13,8 +13,8 @@ export async function Award(user:User,room:Room){
 
     // Para contar todos os cards da Room
     for(let x=0 ; x<countUsers ; x++){
-        let recordUser = await this.PrismaService.user.findUnique({where:{id:userIdList[0]}});
-        totalCards += recordUser.cards.length; 
+      let recordUser = await this.PrismaService.user.findUnique({where:{id:userIdList[0]}});
+      totalCards += recordUser.cards.length; 
     }
    
     if(countUsers<2){
