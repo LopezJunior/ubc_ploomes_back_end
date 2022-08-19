@@ -33,10 +33,9 @@ export class RoomService {
   update(id: number, updateRoomDto: UpdateRoomDto) {
     return `This action updates a #${id} folderName`;
   }
-  
-  async delete(id: string) {
-    await this.prisma.room.delete({where: {id}}).catch(handleError);
-    return {message: 'Você saiu da partida!'};
 
+  async delete(id: string) {
+    await this.prisma.room.delete({ where: { id } }).catch(handleError);
+    return { message: 'Você saiu da partida!' };
   }
 }

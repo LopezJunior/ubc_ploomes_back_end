@@ -7,8 +7,8 @@
 // console.log(bingo);
 
 export function CheckBingo(indicesBolasMarcadas) {
-  if(indicesBolasMarcadas < 5){
-    return false
+  if (indicesBolasMarcadas < 5) {
+    return false;
   }
   CheckLines(indicesBolasMarcadas);
   if (CheckLines(indicesBolasMarcadas)) {

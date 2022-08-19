@@ -7,9 +7,8 @@
 
 // let bolasMarcadas = [3, 5, 7, 8, 9, 11, 15, 22, 25, 28, 31, 33, 34, 35, 41, 53];
 
-
 export function Compare(prizeDraw, bolasMarcadas) {
-  let acertos = [];
+  const acertos = [];
   for (let i = 0; i < bolasMarcadas.length; i++) {
     if (prizeDraw.indexOf(bolasMarcadas[i]) > -1) {
       acertos.push(bolasMarcadas[i]);
@@ -17,4 +16,3 @@ export function Compare(prizeDraw, bolasMarcadas) {
   }
   return acertos;
 }
-

@@ -28,17 +28,19 @@ export class UsersService {
       password: await bcrypt.hash(createUserDto.password, 10),
     };
 
-    return this.prisma.user.create({
-      data,
-      select: {
-        password: false,
-        id: true,
-        name: true,
-        email: true,
-        createdAt: true,
-        updatedAt: true,
-      },
-    }).catch(handleError);
+    return this.prisma.user
+      .create({
+        data,
+        select: {
+          password: false,
+          id: true,
+          name: true,
+          email: true,
+          createdAt: true,
+          updatedAt: true,
+        },
+      })
+      .catch(handleError);
   }
 
   async filterByMoney() {
@@ -112,11 +114,13 @@ export class UsersService {
     }
     const id = user.id;
 
-    return this.prisma.user.update({
-      where: { id },
-      data,
-      select: { id: true, name: true, password: false },
-    }).catch(handleError);
+    return this.prisma.user
+      .update({
+        where: { id },
+        data,
+        select: { id: true, name: true, password: false },
+      })
+      .catch(handleError);
   }
 
   async delete(user: User) {

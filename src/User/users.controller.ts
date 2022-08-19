@@ -62,7 +62,6 @@ export class UsersController {
   @Patch('/myAccount')
   @ApiOperation({ summary: 'Editar dados do usuário logado' })
   update(@LoggedUser() user: User, @Body() updateUserDto: UpdateUserDto) {
-    updateUserDto.id = user.id;
     return this.usersService.update(user, updateUserDto);
   }
 
