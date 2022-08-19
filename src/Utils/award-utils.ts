@@ -1,6 +1,7 @@
-import { User } from "src/User/entities/user.entity";
-import { Room } from "src/Room/entities/room-entity";
+import { User } from 'src/User/entities/user.entity';
+import { Room } from 'src/Room/entities/room-entity';
 import { Prisma } from '@prisma/client';
+
 import { PrismaService } from "src/prisma/prisma.service";
 import { UpdateUserDto } from "src/User/dto/update-user.dto";
 
@@ -29,19 +30,24 @@ export async function Award(user:User,room:Room){
 
     }else{
 
-     await this.PrismaService.user.update({
-      where: {
-        id:user.id,
-      },
-      data:{
-        wallet: user.wallet + (totalCards * room.price)
-      }
-    });
 
+  if (countUsers < 2) {
+    await this.PrismaService.user.update({
+      where: {
+        id: user.id,
+      },
+      data: {
+        wallet: user.wallet + 50 - userPayCards,
+      },
+    });
+  } else {
+    await this.PrismaService.user.update({
+      where: {
+        id: user.id,
+      },
+      data: {
+        wallet: user.wallet + totalCards * room.price,
+      },
+    });
   }
 }
-
-    
-    
-
-

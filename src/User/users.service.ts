@@ -104,7 +104,7 @@ export class UsersService {
 
     delete updateUserDto.confirmPassword;
 
-    const data: Partial<User> = { ...updateUserDto };
+    const data = { ...updateUserDto };
 
     if (data.password) {
       data.password = await bcrypt.hash(data.password, 10);
