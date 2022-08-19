@@ -1,6 +1,8 @@
 import {
   Body, Controller, Delete, Get, Param, Patch, Post
 } from '@nestjs/common';
+import { User } from '@prisma/client';
+import { LoggedUser } from 'src/auth/logged-user.decorator';
 import { CreateRoomDto } from './dto/create-room.dto';
 import { UpdateRoomDto } from './dto/update-room.dto';
 import { RoomService } from './room.service';
@@ -23,6 +25,11 @@ export class RoomController {
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.RoomService.findOne(id);
+  }
+
+  @Get('/room/:id/resetRoom')
+  resetRoom(@Param('id') id: string,@LoggedUser() user:User) {
+    return this.RoomService.resetRoom(id,user.id);
   }
 
   @Patch(':id')
