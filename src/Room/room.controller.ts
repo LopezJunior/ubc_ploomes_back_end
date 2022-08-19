@@ -1,15 +1,10 @@
 import {
-  Controller,
-  Get,
-  Post,
-  Body,
-  Patch,
-  Param,
-  Delete,
+  Body, Controller, Delete, Get, Param, Patch, Post
 } from '@nestjs/common';
-import { RoomService } from './room.service';
 import { CreateRoomDto } from './dto/create-room.dto';
 import { UpdateRoomDto } from './dto/update-room.dto';
+import { RoomService } from './room.service';
+
 
 @Controller('Room')
 export class RoomController {
@@ -35,8 +30,10 @@ export class RoomController {
     return this.RoomService.update(+id, updateRoomDto);
   }
 
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.RoomService.remove(+id);
+
+  @Delete('/room/:id/withdrawRoom')
+  delete(@Param('id') id: string) {
+    return this.RoomService.delete(id);
+
   }
 }

@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { Prisma } from '@prisma/client';
 import { PrismaService } from 'src/prisma/prisma.service';
+import { handleError } from 'src/Utils/handleError.utils';
 import { CreateRoomDto } from './dto/create-room.dto';
 import { UpdateRoomDto } from './dto/update-room.dto';
 
@@ -10,17 +11,15 @@ export class RoomService {
 
   create(dto: CreateRoomDto) {
     const data: Prisma.RoomCreateInput = {
-      number: dto.number,
       maxCards: dto.maxCards,
       limitPrizeDraw: dto.limitPrizeDraw,
       limitRecord: dto.limitRecord,
       limitUsers: dto.limitUsers,
       price: dto.price,
-      historic: dto.historic,
       frequency: dto.frequency,
     };
 
-    return this.prisma.room.create({ data }); //.catch(handleError);
+    return this.prisma.room.create({ data }).catch(handleError);
   }
 
   findAll() {
@@ -34,8 +33,10 @@ export class RoomService {
   update(id: number, updateRoomDto: UpdateRoomDto) {
     return `This action updates a #${id} folderName`;
   }
+  
+  async delete(id: string) {
+    await this.prisma.room.delete({where: {id}}).catch(handleError);
+    return {message: 'Você saiu da partida!'};
 
-  remove(id: number) {
-    return `This action removes a #${id} folderName`;
   }
 }

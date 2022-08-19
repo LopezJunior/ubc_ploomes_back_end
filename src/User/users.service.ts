@@ -9,6 +9,7 @@ import { UpdateUserDto } from './dto/update-user.dto';
 import * as bcrypt from 'bcrypt';
 import { PrismaService } from '../prisma/prisma.service';
 import { User } from './entities/user.entity';
+import { handleError } from 'src/Utils/handleError.utils';
 
 @Injectable()
 export class UsersService {
@@ -37,7 +38,7 @@ export class UsersService {
         createdAt: true,
         updatedAt: true,
       },
-    }); //.catch(handleError);
+    }).catch(handleError);
   }
 
   async filterByMoney() {
@@ -115,12 +116,11 @@ export class UsersService {
       where: { id },
       data,
       select: { id: true, name: true, password: false },
-    });
-    // .catch(handleError);
+    }).catch(handleError);
   }
 
   async delete(user: User) {
     const id = user.id;
-    return await this.prisma.user.delete({ where: { id } });
+    return await this.prisma.user.delete({ where: { id } }).catch(handleError);
   }
 }

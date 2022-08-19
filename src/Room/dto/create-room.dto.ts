@@ -4,49 +4,43 @@ import { IsNumber, IsString } from 'class-validator';
 export class CreateRoomDto {
   @IsNumber()
   @ApiProperty({
-    example: 'Número da sala',
-  })
-  number: number;
-
-  @IsNumber()
-  @ApiProperty({
-    example: 'Número máximo de cartelas',
+    description:'Número máximo de cartelas',
+    example:5,
   })
   maxCards: number;
 
   @IsNumber()
   @ApiProperty({
-    example: 'Limite de sorteios',
+    description:'Limite de sorteios',
+    example:5,
   })
   limitPrizeDraw: number;
 
   @IsNumber()
   @ApiProperty({
-    example: 'Limite de registros',
+    description:'Limite de registro de bolas',
+    example:5,
   })
   limitRecord?: number;
 
   @IsNumber()
   @ApiProperty({
-    example: 'Limite de jogadores na sala',
+    description:'Limite de jogadores na sala',
+    example:3
   })
   limitUsers: number;
 
   @IsNumber()
   @ApiProperty({
-    example: 'Preço a ser pago para jogar a partida',
+    description:'Preço a ser pago por cartela',
+    example:10,
   })
   price: number;
 
   @IsNumber()
   @ApiProperty({
-    example: 'Número de luvas que serão exibidas no histórico de sorteio',
-  })
-  historic: number;
-
-  @IsNumber()
-  @ApiProperty({
-    example: '',
+    description:"Tempo de sorteio entre uma bola e outra",
+    example:10,
   })
   frequency: number;
 }

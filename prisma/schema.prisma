@@ -29,7 +29,7 @@ model User{
 model Room{
   id String @id @default(uuid())
   number Int?
-  userID User []
+  users User []
   maxCards Int? @default(2)
   limitPrizeDraw Int? @default(50)
   limitRecord Int? @default(6)
