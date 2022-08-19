@@ -23,10 +23,6 @@ export class RoomService {
     return this.prisma.room.create({ data }).catch(handleError);
   }
 
-  findAll() {
-    return `This action returns all folderName`;
-  }
-
   async resetRoom(id: string, userID: string) {
     await this.prisma.card.deleteMany({ where: { id: userID } });
 
@@ -50,15 +46,7 @@ export class RoomService {
 
     return data;
   }
-
-  findOne(id: string) {
-    return this.prisma.room.findUnique({ where: { id: id } });
-  }
-
-  update(id: number, updateRoomDto: UpdateRoomDto) {
-    return `This action updates a #${id} folderName`;
-  }
-
+  
   async delete(id: string) {
     await this.prisma.room.delete({ where: { id } }).catch(handleError);
     return { message: 'Você saiu da partida!' };

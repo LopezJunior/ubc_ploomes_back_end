@@ -16,7 +16,9 @@ async function bootstrap() {
     .addTag('Auth')
     .addTag('User')
     .addTag('Room')
-
+    .addTag('Ranking')    
+    .addTag('Cards')    
+    
     .addBearerAuth()
     .build();
 
