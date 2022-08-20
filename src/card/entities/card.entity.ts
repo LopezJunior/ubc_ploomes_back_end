@@ -1,10 +1,11 @@
-import { User } from '@prisma/client';
+import { User } from "src/User/entities/user.entity";
+import { Room } from "src/Room/entities/room-entity";
 
 export class Card {
   id?: string;
   vetor: number[];
-  userID: string;
-  roomID:string;
+  user: User;
+  room:Room;
   createdAt: Date;
   updatedAt: Date;
 }

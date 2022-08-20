@@ -33,8 +33,7 @@ export class CardService {
         connect:{
           id:user.id
         }
-      },
-      
+      },      
       vetor:card,
     };
 
