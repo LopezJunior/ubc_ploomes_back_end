@@ -10,43 +10,44 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model User{
-  id String @id @default(uuid())
-  name String @unique
-  email String @unique
-  password String
-  wallet Float? @default(100)
-  matches Int? @default(0)
-  wins Int? @default(0)
-  withdraws Int? @default(0)
-  cards Card[]
-  room Room? @relation(fields: [roomID],references: [id])
-  roomID String?
+model User {
+  id        String   @id @default(uuid())
+  name      String   @unique
+  email     String   @unique
+  password  String
+  wallet    Float?   @default(100)
+  matches   Int?     @default(0)
+  wins      Int?     @default(0)
+  withdraws Int?     @default(0)
+  cards     Card[]
+  room      Room?    @relation(fields: [roomID], references: [id])
+  roomID    String?
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 }
 
-model Room{
-  id String @id @default(uuid())
-  number Int?
-  users User []
-  maxCards Int? @default(2)
-  limitPrizeDraw Int? @default(50)
-  limitRecord Int? @default(6)
-  limitUsers Int? @default(1)
-  price Float?
+model Room {
+  id             String    @id @default(uuid())
+  number         Int?
+  users          User[]
+  maxCards       Int?      @default(2)
+  limitPrizeDraw Int?      @default(50)
+  limitRecord    Int?      @default(6)
+  limitUsers     Int?      @default(1)
+  price          Float?
   //rules enum
-  historic Int[] 
-  frequency Int? @default(10)
-  createdAt DateTime? @default(now()) @map("created_at")
-  updatedAt DateTime? @updatedAt @map("updated_at")
+  historic       Int[]
+  frequency      Int?      @default(10)
+  createdAt      DateTime? @default(now()) @map("created_at")
+  updatedAt      DateTime? @updatedAt @map("updated_at")
 }
 
-model Card{
-  id String @id @default(uuid())
-  vetor Int[] 
-  user User @relation(fields: [userID],references: [id])
-  userID String
+model Card {
+  id        String   @id @default(uuid())
+  vetor     Int[]
+  markings  Int[]
+  user      User     @relation(fields: [userID], references: [id])
+  userID    String
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 }
