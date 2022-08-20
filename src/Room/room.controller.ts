@@ -14,6 +14,8 @@ import { CreateRoomDto } from './dto/create-room.dto';
 import { RoomService } from './room.service';
 
 @ApiTags('Room')
+@UseGuards(AuthGuard())
+@ApiBearerAuth()
 @Controller('Room')
 export class RoomController {
   constructor(private readonly RoomService: RoomService) {}

@@ -2,7 +2,9 @@
 //sorteio de 5 listas (B, I, N, G, O) e organização numa lista maior,
 //Não armazenar números repetidos.
 
-export function CreateCard(card: number[]) {
+export function CreateCard():number[] {
+  let card = []
+
   let b = [],
     i = [],
     n = [],

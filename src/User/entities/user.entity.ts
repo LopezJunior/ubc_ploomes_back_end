@@ -1,4 +1,4 @@
-import { Room } from '@prisma/client';
+import { Room } from 'src/Room/entities/room-entity';
 import { Card } from '../../card/entities/card.entity';
 
 export class User {

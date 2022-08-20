@@ -30,6 +30,7 @@ model Room{
   id String @id @default(uuid())
   number Int?
   users User []
+  card Card[]
   maxCards Int? @default(2)
   limitPrizeDraw Int? @default(50)
   limitRecord Int? @default(6)
@@ -47,6 +48,8 @@ model Card{
   vetor Int[] 
   user User @relation(fields: [userID],references: [id])
   userID String
+  room Room @relation(fields: [roomID],references: [id])
+  roomID String
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 }
