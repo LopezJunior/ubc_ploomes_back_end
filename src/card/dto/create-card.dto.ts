@@ -17,4 +17,12 @@ export class CreateCardDto {
     example:"jiododiodjiodjiodjiodjido"
   })
   userID: string;
+
+  @IsString()
+  @IsNotEmpty()
+  @ApiProperty({
+    description: 'Id da sala onde está ocorrendo a partida',
+    example:"jiododiodjiodjiodjiodjido"
+  })
+  roomID: string;
 }

@@ -10,8 +10,7 @@ import {
 import { ApiTags } from '@nestjs/swagger';
 import { Prisma, User } from '@prisma/client';
 import { userInfo } from 'os';
-import { CreateCard } from 'src/Utils/createCard-utils';
-import { handleError } from 'src/Utils/handleError.utils';
+import { LoggedUser } from 'src/auth/logged-user.decorator';
 import { CardService } from './card.service';
 import { CreateCardDto } from './dto/create-card.dto';
 import { UpdateCardDto } from './dto/update-card.dto';
@@ -23,28 +22,8 @@ export class CardController {
   constructor(private readonly cardService: CardService) {}
 
   @Post()
-  create(id:string) {
-    let card = []
-    CreateCard(card)
-
-    const data: Prisma.CardCreateInput = {
-      user:{
-        connect:{
-          id:id
-        }
-      },
-      vetor:card,
-    };
-
-    return this.prisma.card.create({
-      data,
-      select: {
-        vetor:true,
-        id:{
-          id:true
-        }
-      },
-    }).catch(handleError);
+  create(dto:CreateCardDto,@LoggedUser() user:User) {
+    return this.cardService.create(dto,user);    
   }
 
   @Get()

@@ -3,7 +3,8 @@ import { User } from '@prisma/client';
 export class Card {
   id?: string;
   vetor: number[];
-  userId: User;
+  userID: string;
+  roomID:string;
   createdAt: Date;
   updatedAt: Date;
 }
