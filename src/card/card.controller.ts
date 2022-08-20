@@ -8,6 +8,10 @@ import {
   Delete,
 } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
+import { Prisma, User } from '@prisma/client';
+import { userInfo } from 'os';
+import { CreateCard } from 'src/Utils/createCard-utils';
+import { handleError } from 'src/Utils/handleError.utils';
 import { CardService } from './card.service';
 import { CreateCardDto } from './dto/create-card.dto';
 import { UpdateCardDto } from './dto/update-card.dto';
@@ -15,11 +19,32 @@ import { UpdateCardDto } from './dto/update-card.dto';
 @ApiTags('Cards')
 @Controller('card')
 export class CardController {
+  prisma: any;
   constructor(private readonly cardService: CardService) {}
 
   @Post()
-  create(@Body() createCardDto: CreateCardDto) {
-    return this.cardService.create(createCardDto);
+  create(id:string) {
+    let card = []
+    CreateCard(card)
+
+    const data: Prisma.CardCreateInput = {
+      user:{
+        connect:{
+          id:id
+        }
+      },
+      vetor:card,
+    };
+
+    return this.prisma.card.create({
+      data,
+      select: {
+        vetor:true,
+        id:{
+          id:true
+        }
+      },
+    }).catch(handleError);
   }
 
   @Get()
