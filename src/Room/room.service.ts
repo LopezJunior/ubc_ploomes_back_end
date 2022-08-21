@@ -1,5 +1,6 @@
 import { Injectable, Param } from '@nestjs/common';
-import { Prisma, User } from '@prisma/client';
+import { Prisma} from '@prisma/client';
+import { User } from 'src/User/entities/user.entity';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { handleError } from 'src/Utils/handleError.utils';
 import { CreateRoomDto } from './dto/create-room.dto';
@@ -10,7 +11,7 @@ import { UsersService } from 'src/User/users.service';
 export class RoomService {
   constructor(private readonly prisma: PrismaService) {}
 
-  create(dto: CreateRoomDto) {
+  async create(dto: CreateRoomDto) {
     const data: Prisma.RoomCreateInput = {
       maxCards: dto.maxCards,
       limitPrizeDraw: dto.limitPrizeDraw,
