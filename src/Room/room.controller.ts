@@ -8,7 +8,7 @@ import {
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
-import { User } from '@prisma/client';
+import { User } from 'src/User/entities/user.entity';
 import { LoggedUser } from 'src/auth/logged-user.decorator';
 import { CreateRoomDto } from './dto/create-room.dto';
 import { RoomService } from './room.service';
@@ -23,8 +23,7 @@ export class RoomController {
   @UseGuards(AuthGuard())
   @ApiBearerAuth()
   @Post('/Start')
-  create(@Body() dto: CreateRoomDto) {
-    return this.RoomService.create(dto);
+  create(@LoggedUser() user:User,@Body() dto: CreateRoomDto) {
     return this.RoomService.create(user,dto);
   }
 
