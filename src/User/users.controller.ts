@@ -18,27 +18,31 @@ import { AuthGuard } from '@nestjs/passport';
 import { User } from './entities/user.entity';
 import { LoggedUser } from 'src/auth/logged-user.decorator';
 
-@ApiTags('User')
+
 @Controller()
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
+  @ApiTags('Auth')
   @Post('/login/register')
   @ApiOperation({ summary: 'Criar um usuário' })
   create(@Body() createUserDto: CreateUserDto) {
     return this.usersService.create(createUserDto);
   }
 
+  @ApiTags('Ranking')
   @Get('ranking/filterByMoney')
   filterByMoney() {
     return this.usersService.filterByMoney();
   }
 
+  @ApiTags('Ranking')
   @Get('ranking/filterByWins')
   filterByWins() {
     return this.usersService.filterByWins();
   }
 
+  @ApiTags('Ranking')
   @UseGuards(AuthGuard())
   @ApiBearerAuth()
   @Get('/ranking/user/:id')
@@ -47,6 +51,7 @@ export class UsersController {
     return this.usersService.findOne(id);
   }
 
+  @ApiTags('User')
   @UseGuards(AuthGuard())
   @ApiBearerAuth()
   @Get('/myAccount')
@@ -57,6 +62,7 @@ export class UsersController {
     return this.usersService.profile(user);
   }
 
+  @ApiTags('User')
   @UseGuards(AuthGuard())
   @ApiBearerAuth()
   @Patch('/myAccount')
@@ -65,6 +71,7 @@ export class UsersController {
     return this.usersService.update(user, updateUserDto);
   }
 
+  @ApiTags('User')
   @UseGuards(AuthGuard())
   @ApiBearerAuth()
   @HttpCode(HttpStatus.NO_CONTENT)

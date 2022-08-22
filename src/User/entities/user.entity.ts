@@ -1,4 +1,4 @@
-import { Card } from 'src/Card/entities/card.entity';
+import { Card } from '../../card/entities/card.entity';
 
 export class User {
   id?: string;

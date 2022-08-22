@@ -6,35 +6,32 @@ import {
   Param,
   Patch,
   Post,
+  UseGuards,
 } from '@nestjs/common';
+import { AuthGuard } from '@nestjs/passport';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { User } from '@prisma/client';
 import { LoggedUser } from 'src/auth/logged-user.decorator';
 import { CreateRoomDto } from './dto/create-room.dto';
-import { UpdateRoomDto } from './dto/update-room.dto';
 import { RoomService } from './room.service';
 
+@ApiTags('Room')
 @Controller('Room')
 export class RoomController {
   constructor(private readonly RoomService: RoomService) {}
 
+  @UseGuards(AuthGuard())
+  @ApiBearerAuth()
   @Post('/Start')
   create(@Body() dto: CreateRoomDto) {
     return this.RoomService.create(dto);
   }
 
-  @Get()
-  findAll() {
-    return this.RoomService.findAll();
-  }
-
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.RoomService.findOne(id);
-  }
-
+  @UseGuards(AuthGuard())
+  @ApiBearerAuth()
   @Get('/room/:id/resetRoom')
-  resetRoom(@Param('id') id: string,@LoggedUser() user:User) {
-    return this.RoomService.resetRoom(id,user.id);
+  resetRoom(@Param('id') id: string, @LoggedUser() user: User) {
+    return this.RoomService.resetRoom(id, user.id);
   }
 
   @Patch(':id')
@@ -42,6 +39,8 @@ export class RoomController {
     return this.RoomService.update(+id, updateRoomDto);
   }
 
+  @UseGuards(AuthGuard())
+  @ApiBearerAuth()
   @Delete('/room/:id/withdrawRoom')
   delete(@Param('id') id: string) {
     return this.RoomService.delete(id);

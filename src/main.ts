@@ -16,13 +16,15 @@ async function bootstrap() {
     .addTag('Auth')
     .addTag('User')
     .addTag('Room')
-
+    .addTag('Ranking')    
+    .addTag('Cards')    
+    
     .addBearerAuth()
     .build();
 
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api', app, document);
 
-  await app.listen(process.env.PORT || 3000);
+  await app.listen(process.env.PORT || 3333);
 }
 bootstrap();
