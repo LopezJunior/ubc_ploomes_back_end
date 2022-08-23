@@ -1,4 +1,3 @@
-import { Room } from 'src/Room/entities/room-entity';
 import { User } from 'src/User/entities/user.entity';
 
 export async function Award(winner:User,totalCards: number){

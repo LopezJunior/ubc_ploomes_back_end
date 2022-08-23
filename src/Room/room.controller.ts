@@ -38,7 +38,6 @@ export class RoomController {
   @ApiBearerAuth()
   @Get('/room/resetRoom')
   resetRoom(@LoggedUser() user: User,dto: CreateRoomDto) {
-    return this.RoomService.resetRoom(user,dto);
   }
 
   @UseGuards(AuthGuard())
