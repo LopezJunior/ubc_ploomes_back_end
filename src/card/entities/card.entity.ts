@@ -5,7 +5,6 @@ export class Card {
   id?: string;
   vetor: number[];
   user: User;
-  room:Room;
   createdAt: Date;
   updatedAt: Date;
 }

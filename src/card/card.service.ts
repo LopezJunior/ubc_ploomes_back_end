@@ -1,29 +1,29 @@
 import { Injectable } from '@nestjs/common';
-import { Prisma,User,Room} from '@prisma/client';
+import { Prisma,Room} from '@prisma/client';
+import { User } from 'src/User/entities/user.entity';
 import { LoggedUser } from 'src/auth/logged-user.decorator';
 import { CreateCard } from 'src/Utils/createCard-utils';
-import { CreateCardDto } from './dto/create-card.dto';
-import { UpdateCardDto } from './dto/update-card.dto';
 import { handleError } from 'src/Utils/handleError.utils';
 import { PrismaService } from 'src/prisma/prisma.service';
 
 @Injectable()
 export class CardService {
+  delete(id: string) {
+    throw new Error('Method not implemented.');
+  }
   constructor(private readonly prisma: PrismaService) {}
 
-  async create(dto:CreateCardDto,user:User) {
+   async create(user:User) {
     
     let generateCard = CreateCard();
-
-    let room = await this.prisma.room.findUnique({where:{id:user.roomID}});
+    
+    const priceCard = await this.prisma.user.findUnique({where:{id:user.id},select:{room:{select:{price:true}}}});
     let cards = await this.prisma.user.findUnique({where:{id:user.id},select:{cards:true}});
-
-    const payCards = room.price * cards.cards.length;
 
     await this.prisma.user.update({
       where:{id:user.id},
       data:{
-        wallet: user.wallet - payCards
+        wallet: user.wallet - priceCard.room.price
       }
     });
 
@@ -33,11 +33,6 @@ export class CardService {
           id:user.id
         }
       }, 
-      room:{
-        connect:{
-          id:user.roomID
-        }    
-      },     
       vetor:generateCard,
     };
 
@@ -49,21 +44,13 @@ export class CardService {
           name:true,
         }
       },
-      room:{
-        select:{
-          number:true,
-        }
-      },
       vetor:true
       }
     }).catch(handleError);
   }
 
-  update(id: number, updateCardDto: UpdateCardDto) {
-    return `This action updates a #${id} card`;
-  }
 
-  remove(id:string) {
+  async remove(id:string) {
     return this.prisma.card.delete({where:{id:id}});
   }
 }

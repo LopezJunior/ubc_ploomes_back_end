@@ -5,7 +5,6 @@ export class Room {
   id?: string;
   number: number;
   users?: User[];
-  cards?:Card[];
   maxCards?: number;
   limitPrizeDraw?: number;
   limitRecord?: number;

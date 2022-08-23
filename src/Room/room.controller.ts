@@ -22,16 +22,23 @@ export class RoomController {
 
   @UseGuards(AuthGuard())
   @ApiBearerAuth()
-  @Post('/Start')
+  @Post('/room')
   create(@LoggedUser() user:User,@Body() dto: CreateRoomDto) {
     return this.RoomService.create(user,dto);
   }
 
   @UseGuards(AuthGuard())
   @ApiBearerAuth()
-  @Get('/room/:id/resetRoom')
-  resetRoom(@Param('id') id: string, @LoggedUser() user: User) {
-    return this.RoomService.resetRoom(id, user.id);
+  @Get('/room/:id')
+  FindById(@Param('id') id: string) {
+    return this.RoomService.findById(id);
+  }
+
+  @UseGuards(AuthGuard())
+  @ApiBearerAuth()
+  @Get('/room/resetRoom')
+  resetRoom(@LoggedUser() user: User,dto: CreateRoomDto) {
+    return this.RoomService.resetRoom(user,dto);
   }
 
   @UseGuards(AuthGuard())
