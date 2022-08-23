@@ -2,17 +2,17 @@
 //sorteio de 5 listas (B, I, N, G, O) e organização numa lista maior,
 //Não armazenar números repetidos.
 
-export function CreateCard():number[] {
-  let card = []
+export function CreateCard(): number[] {
+  const cardNumbers = [];
 
-  let b = [],
+  const b = [],
     i = [],
     n = [],
     g = [],
     o = [];
 
   for (let x = 0; x < 5; x++) {
-    let y = Math.ceil(Math.random() * 15);
+    const y = Math.ceil(Math.random() * 15);
     if (b.indexOf(y) != -1) {
       x--;
       continue;
@@ -22,7 +22,7 @@ export function CreateCard():number[] {
   }
 
   for (let x = 0; x < 5; x++) {
-    let y = Math.ceil(Math.random() * 15 + 15);
+    const y = Math.ceil(Math.random() * 15 + 15);
     if (i.indexOf(y) != -1) {
       x--;
       continue;
@@ -32,7 +32,7 @@ export function CreateCard():number[] {
   }
 
   for (let x = 0; x < 5; x++) {
-    let y = Math.ceil(Math.random() * 15 + 30);
+    const y = Math.ceil(Math.random() * 15 + 30);
     if (n.indexOf(y) != -1) {
       x--;
       continue;
@@ -42,7 +42,7 @@ export function CreateCard():number[] {
   }
 
   for (let x = 0; x < 5; x++) {
-    let y = Math.ceil(Math.random() * 15 + 45);
+    const y = Math.ceil(Math.random() * 15 + 45);
     if (g.indexOf(y) != -1) {
       x--;
       continue;
@@ -52,7 +52,7 @@ export function CreateCard():number[] {
   }
 
   for (let x = 0; x < 5; x++) {
-    let y = Math.ceil(Math.random() * 15 + 60);
+    const y = Math.ceil(Math.random() * 15 + 60);
     if (o.indexOf(y) != -1) {
       x--;
       continue;
@@ -60,26 +60,26 @@ export function CreateCard():number[] {
       o.push(y);
     }
   }
-  
+
   for (let x = 0; x < 5; x++) {
-    card.push(b[x]);
+    cardNumbers.push(b[x]);
   }
 
   for (let x = 0; x < 5; x++) {
-    card.push(i[x]);
+    cardNumbers.push(i[x]);
   }
 
   for (let x = 0; x < 5; x++) {
-    card.push(n[x]);
+    cardNumbers.push(n[x]);
   }
 
   for (let x = 0; x < 5; x++) {
-    card.push(g[x]);
+    cardNumbers.push(g[x]);
   }
 
   for (let x = 0; x < 5; x++) {
-    card.push(o[x]);
+    cardNumbers.push(o[x]);
   }
 
-  return card;
+  return cardNumbers;
 }

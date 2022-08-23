@@ -18,7 +18,6 @@ import { AuthGuard } from '@nestjs/passport';
 import { User } from './entities/user.entity';
 import { LoggedUser } from 'src/auth/logged-user.decorator';
 
-
 @Controller()
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
@@ -68,7 +67,6 @@ export class UsersController {
   @Patch('/myAccount')
   @ApiOperation({ summary: 'Editar dados do usuário logado' })
   update(@LoggedUser() user: User, @Body() updateUserDto: UpdateUserDto) {
-    updateUserDto.id = user.id;
     return this.usersService.update(user, updateUserDto);
   }
 
