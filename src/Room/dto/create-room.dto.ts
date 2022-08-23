@@ -1,5 +1,5 @@
 import { ApiProperty, PartialType } from '@nestjs/swagger';
-import { IsNumber, IsString } from 'class-validator';
+import { IsNumber, IsString} from 'class-validator';
 
 export class CreateRoomDto {
   @IsNumber()
@@ -43,4 +43,5 @@ export class CreateRoomDto {
     example:10,
   })
   frequency: number;
+
 }

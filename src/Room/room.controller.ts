@@ -8,28 +8,37 @@ import {
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
-import { User } from '@prisma/client';
+import { User } from 'src/User/entities/user.entity';
 import { LoggedUser } from 'src/auth/logged-user.decorator';
 import { CreateRoomDto } from './dto/create-room.dto';
 import { RoomService } from './room.service';
 
 @ApiTags('Room')
+@UseGuards(AuthGuard())
+@ApiBearerAuth()
 @Controller('Room')
 export class RoomController {
   constructor(private readonly RoomService: RoomService) {}
 
   @UseGuards(AuthGuard())
   @ApiBearerAuth()
-  @Post('/Start')
-  create(@Body() dto: CreateRoomDto) {
-    return this.RoomService.create(dto);
+  @Post('/room')
+  create(@LoggedUser() user:User,@Body() dto: CreateRoomDto) {
+    return this.RoomService.create(user,dto);
   }
 
   @UseGuards(AuthGuard())
   @ApiBearerAuth()
-  @Get('/room/:id/resetRoom')
-  resetRoom(@Param('id') id: string, @LoggedUser() user: User) {
-    return this.RoomService.resetRoom(id, user.id);
+  @Get('/room/:id')
+  FindById(@Param('id') id: string) {
+    return this.RoomService.findById(id);
+  }
+
+  @UseGuards(AuthGuard())
+  @ApiBearerAuth()
+  @Get('/room/resetRoom')
+  resetRoom(@LoggedUser() user: User,dto: CreateRoomDto) {
+    return this.RoomService.resetRoom(user,dto);
   }
 
   @UseGuards(AuthGuard())

@@ -6,39 +6,30 @@ import {
   Patch,
   Param,
   Delete,
+  UseGuards,
 } from '@nestjs/common';
-import { ApiTags } from '@nestjs/swagger';
+import { AuthGuard } from '@nestjs/passport';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { Prisma} from '@prisma/client';
+import { User } from 'src/User/entities/user.entity';
+import { userInfo } from 'os';
+import { LoggedUser } from 'src/auth/logged-user.decorator';
 import { CardService } from './card.service';
-import { CreateCardDto } from './dto/create-card.dto';
-import { UpdateCardDto } from './dto/update-card.dto';
 
 @ApiTags('Cards')
+@UseGuards(AuthGuard())
+@ApiBearerAuth()
 @Controller('card')
 export class CardController {
   constructor(private readonly cardService: CardService) {}
 
   @Post()
-  create(@Body() createCardDto: CreateCardDto) {
-    return this.cardService.create(createCardDto);
-  }
-
-  @Get()
-  findAll() {
-    return this.cardService.findAll();
-  }
-
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.cardService.findOne(+id);
-  }
-
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateCardDto: UpdateCardDto) {
-    return this.cardService.update(+id, updateCardDto);
+  create(@LoggedUser() user:User) {
+    return this.cardService.create(user);    
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.cardService.remove(+id);
+  remove(@Param('id') id:string) {
+    return this.cardService.remove(id);
   }
 }

@@ -1,54 +1,74 @@
 import { Injectable, Param } from '@nestjs/common';
-import { Prisma, User } from '@prisma/client';
+import { Prisma} from '@prisma/client';
+import { User } from 'src/User/entities/user.entity';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { handleError } from 'src/Utils/handleError.utils';
 import { CreateRoomDto } from './dto/create-room.dto';
 import { UpdateRoomDto } from './dto/update-room.dto';
-import { UsersService } from 'src/User/users.service';
+import { match } from 'assert';
+import { LoggedUser } from 'src/auth/logged-user.decorator';
+import { Room } from './entities/room-entity';
+import { CardService } from 'src/card/card.service';
 
 @Injectable()
 export class RoomService {
-  constructor(private readonly prisma: PrismaService) {}
+  CardService: any;
+  constructor(private readonly prisma: PrismaService,private readonly cardService: CardService) {}
 
-  create(dto: CreateRoomDto) {
+  async create(user:User, dto: CreateRoomDto) {
+
+    let roomList = await this.prisma.room.findMany();
+    let numberGenerate = 1;  
+
+    for(let x = 0 ; x < roomList.length ; x++){
+
+      if(roomList[x].number == numberGenerate){
+        numberGenerate++;
+        x--;
+      }
+    }
+ 
     const data: Prisma.RoomCreateInput = {
+      number:numberGenerate,
       maxCards: dto.maxCards,
       limitPrizeDraw: dto.limitPrizeDraw,
       limitRecord: dto.limitRecord,
       limitUsers: dto.limitUsers,
       price: dto.price,
       frequency: dto.frequency,
+      users:{
+        connect:{
+          id:user.id
+        }
+      }
     };
 
-    return this.prisma.room.create({ data }).catch(handleError);
+    const room = await this.prisma.room.create({ data }).catch(handleError);
+    const card = await this.cardService.create(user);
+
+    return {room,card};
   }
 
-  async resetRoom(id: string, userID: string) {
-    await this.prisma.card.deleteMany({ where: { id: userID } });
+  async findById(id:string){
+    return this.prisma.room.findUnique({where:{id:id}});
+  }
+
+  async resetRoom(user: User,dto: CreateRoomDto) {
+    await this.prisma.card.deleteMany({ where: { userID: user.id }});
+
+    const room = await this.prisma.user.findUnique({where:{id:user.id},select:{room:true}});
 
     const data = await this.prisma.room.findUnique({
-      where: { id: id },
-      select: {
-        number: true,
-        maxCards: true,
-        limitPrizeDraw: true,
-        limitRecord: true,
-        limitUsers: true,
-        price: true,
-        frequency: true,
-        users: true,
-      },
+      where: {id:room.room.id}
     });
 
-    await this.prisma.room.delete({ where: { id: id } });
+    await this.prisma.room.delete({ where: { id:room.room.id} });
 
-    this.create(data);
-
-    return data;
+    return this.create(user,data);
   }
   
   async delete(id: string) {
-    await this.prisma.room.delete({ where: { id } }).catch(handleError);
+    await this.prisma.room.delete({ where: { id:id } }).catch(handleError);
     return { message: 'Você saiu da partida!' };
   }
 }
