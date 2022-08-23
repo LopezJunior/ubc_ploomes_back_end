@@ -1,14 +1,12 @@
-import { User } from 'src/User/entities/user.entity';
+import { Room } from "src/Room/entities/room-entity";
+import { User } from "src/User/entities/user.entity";
 
-export async function ValidTransaction(user:User){
-
-    const cardPrice = user.room.price;
-    let validTransaction:boolean = undefined;
+export async function ValidTransaction(user:User,cardPrice:number){
 
   if (user.wallet < cardPrice) {
-    return validTransaction = false;    
+    return  false;    
   } else {
-    return validTransaction = true;
+    return  true;
   }
       
 }
