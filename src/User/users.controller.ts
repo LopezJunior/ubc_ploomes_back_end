@@ -18,7 +18,6 @@ import { AuthGuard } from '@nestjs/passport';
 import { User } from './entities/user.entity';
 import { LoggedUser } from 'src/auth/logged-user.decorator';
 
-
 @Controller()
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}

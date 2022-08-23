@@ -2,15 +2,15 @@
 //sorteio de 5 listas (B, I, N, G, O) e organização numa lista maior,
 //Não armazenar números repetidos.
 
-export function CreateCard(card: number[]) {
-  let b = [],
+export function CreateCard(card: number[]): number[] {
+  const b = [],
     i = [],
     n = [],
     g = [],
     o = [];
 
   for (let x = 0; x < 5; x++) {
-    let y = Math.ceil(Math.random() * 15);
+    const y = Math.ceil(Math.random() * 15);
     if (b.indexOf(y) != -1) {
       x--;
       continue;
@@ -20,7 +20,7 @@ export function CreateCard(card: number[]) {
   }
 
   for (let x = 0; x < 5; x++) {
-    let y = Math.ceil(Math.random() * 15 + 15);
+    const y = Math.ceil(Math.random() * 15 + 15);
     if (i.indexOf(y) != -1) {
       x--;
       continue;
@@ -30,7 +30,7 @@ export function CreateCard(card: number[]) {
   }
 
   for (let x = 0; x < 5; x++) {
-    let y = Math.ceil(Math.random() * 15 + 30);
+    const y = Math.ceil(Math.random() * 15 + 30);
     if (n.indexOf(y) != -1) {
       x--;
       continue;
@@ -40,7 +40,7 @@ export function CreateCard(card: number[]) {
   }
 
   for (let x = 0; x < 5; x++) {
-    let y = Math.ceil(Math.random() * 15 + 45);
+    const y = Math.ceil(Math.random() * 15 + 45);
     if (g.indexOf(y) != -1) {
       x--;
       continue;
@@ -50,7 +50,7 @@ export function CreateCard(card: number[]) {
   }
 
   for (let x = 0; x < 5; x++) {
-    let y = Math.ceil(Math.random() * 15 + 60);
+    const y = Math.ceil(Math.random() * 15 + 60);
     if (o.indexOf(y) != -1) {
       x--;
       continue;

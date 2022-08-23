@@ -2,7 +2,7 @@ import { PrismaService } from 'src/prisma/prisma.service';
 import { Room } from 'src/Room/entities/room-entity';
 import { User } from 'src/User/entities/user.entity';
 
-export async function Award(user: User, room: Room) {
+export async function AwardUser(user: User, room: Room) {
   const countUsers = room.users.length; // numero de jogadores
   const userIdList = room.users; // id de todos os usuários
   const userPayCards = user.cards.length * room.price; // Pagamento cartelas
