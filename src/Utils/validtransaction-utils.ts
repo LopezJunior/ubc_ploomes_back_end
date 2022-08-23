@@ -1,11 +1,14 @@
 import { User } from 'src/User/entities/user.entity';
 
-export async function Award(user:User){
+export async function ValidTransaction(user:User){
 
-  if (user. < 2) {
-    return winnerWallet += 50;    
+    const cardPrice = user.room.price;
+    let validTransaction:boolean = undefined;
+
+  if (user.wallet < cardPrice) {
+    return validTransaction = false;    
   } else {
-    return winnerWallet += totalCards * winner.room.price
+    return validTransaction = true;
   }
       
 }
