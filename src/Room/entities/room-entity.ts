@@ -1,5 +1,4 @@
 import { User } from 'src/User/entities/user.entity';
-import { Card } from 'src/card/entities/card.entity';
 
 export class Room {
   id?: string;

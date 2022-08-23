@@ -2,10 +2,10 @@
 //sorteio de 5 listas (B, I, N, G, O) e organização numa lista maior,
 //Não armazenar números repetidos.
 
-export function CreateCard():number[] {
-  let card = []
+export function CreateCard(): number[] {
+  const cardNumbers = [];
 
-  let b = [],
+  const b = [],
     i = [],
     n = [],
     g = [],
@@ -62,24 +62,24 @@ export function CreateCard():number[] {
   }
 
   for (let x = 0; x < 5; x++) {
-    card.push(b[x]);
+    cardNumbers.push(b[x]);
   }
 
   for (let x = 0; x < 5; x++) {
-    card.push(i[x]);
+    cardNumbers.push(i[x]);
   }
 
   for (let x = 0; x < 5; x++) {
-    card.push(n[x]);
+    cardNumbers.push(n[x]);
   }
 
   for (let x = 0; x < 5; x++) {
-    card.push(g[x]);
+    cardNumbers.push(g[x]);
   }
 
   for (let x = 0; x < 5; x++) {
-    card.push(o[x]);
+    cardNumbers.push(o[x]);
   }
 
-  return card;
+  return cardNumbers;
 }

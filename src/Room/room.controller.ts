@@ -4,14 +4,13 @@ import {
   Delete,
   Get,
   Param,
-  Patch,
   Post,
   UseGuards,
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
-import { User } from 'src/User/entities/user.entity';
 import { LoggedUser } from 'src/auth/logged-user.decorator';
+import { User } from 'src/User/entities/user.entity';
 import { CreateRoomDto } from './dto/create-room.dto';
 import { RoomService } from './room.service';
 
@@ -25,8 +24,8 @@ export class RoomController {
   @UseGuards(AuthGuard())
   @ApiBearerAuth()
   @Post('/room')
-  create(@LoggedUser() user:User,@Body() dto: CreateRoomDto) {
-    return this.RoomService.create(user,dto);
+  create(@LoggedUser() user: User, @Body() dto: CreateRoomDto) {
+    return this.RoomService.create(user, dto);
   }
 
   @UseGuards(AuthGuard())
@@ -39,13 +38,8 @@ export class RoomController {
   @UseGuards(AuthGuard())
   @ApiBearerAuth()
   @Get('/room/resetRoom')
-  resetRoom(@LoggedUser() user: User,dto: CreateRoomDto) {
-    return this.RoomService.resetRoom(user,dto);
-  }
-
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateRoomDto: UpdateRoomDto) {
-    return this.RoomService.update(+id, updateRoomDto);
+  resetRoom(@LoggedUser() user: User) {
+    return this.RoomService.resetRoom(user);
   }
 
   @UseGuards(AuthGuard())

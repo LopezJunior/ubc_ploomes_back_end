@@ -8,6 +8,6 @@ import { CardService } from 'src/card/card.service';
 @Module({
   imports: [PrismaModule, PassportModule.register({ defaultStrategy: 'jwt' })],
   controllers: [RoomController],
-  providers: [RoomService,CardService],
+  providers: [RoomService, CardService],
 })
 export class RoomModule {}
