@@ -84,7 +84,7 @@ function CheckDiagonals(mapIndex: number[]) {
   } while (control <= 5);
 }
 
-function Check(mapIndex: number[], indexLine) {
+function Check(mapIndex: number[], indexLine: number[]) {
   const bingo = [];
 
   mapIndex.forEach((index) => {
