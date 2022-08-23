@@ -12,7 +12,7 @@ async function bootstrap() {
     .setTitle('Api-UBC-Bingo')
     .setDescription('Jogo de bingo online com temática do UFC!')
     .setVersion('1.0.0')
-    .addTag('status')
+    .addTag('Status')
     .addTag('Auth')
     .addTag('User')
     .addTag('Room')
