@@ -1,6 +1,6 @@
 import { User } from 'src/User/entities/user.entity';
 
-export async function Award(winner: User, totalCards: number) {
+export async function AwardUser(winner: User, totalCards: number) {
   const countUsers = winner.room.users.length;
   let winnerWallet = winner.wallet;
 
