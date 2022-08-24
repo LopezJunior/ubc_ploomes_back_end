@@ -3,10 +3,10 @@ import { IsInt, IsNumber, Max, Min } from 'class-validator';
 
 export class CreateRoomDto {
   @Min(1)
-  @Max(5)
+  @Max(4)
   @IsNumber()
   @ApiProperty({
-    description: 'Número de cartelas que deseja adquirir (entre 1 e 5)',
+    description: 'Número de cartelas que deseja adquirir (entre 1 e 4)',
     example: 5,
   })
   maxCards: number;

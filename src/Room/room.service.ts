@@ -35,7 +35,7 @@ export class RoomService {
 
     const data: Prisma.RoomCreateInput = {
       number: numberGenerate,
-      maxCards: dto.maxCards,
+      maxCards: dto.maxCards,      
       limitPrizeDraw: dto.limitPrizeDraw,
       limitRecord: dto.limitRecord,
       limitUsers: dto.limitUsers,
