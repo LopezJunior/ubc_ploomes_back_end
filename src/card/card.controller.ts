@@ -5,6 +5,7 @@ import { LoggedUser } from 'src/auth/logged-user.decorator';
 import { User } from 'src/User/entities/user.entity';
 import { CardService } from './card.service';
 
+
 @ApiTags('Cards')
 @UseGuards(AuthGuard())
 @ApiBearerAuth()
@@ -13,12 +14,11 @@ export class CardController {
   constructor(private readonly cardService: CardService) {}
 
   @Post()
-  create(@LoggedUser() user: User) {
-    return this.cardService.create(user);
-  }
+  create(@LoggedUser() user:User) {
+  return this.cardService.create(user);}
 
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.cardService.remove(id);
-  }
+  //@Delete(':id')
+  //remove(@LoggedUser() user:User,@Param('id') id:string) {
+  //  return this.cardService.remove(user,id);
+  //}
 }

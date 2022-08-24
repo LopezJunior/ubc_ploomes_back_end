@@ -34,6 +34,7 @@ model Room {
   limitPrizeDraw Int?      @default(50) // limite de sorteios
   limitRecord    Int?      @default(6)  // limite de bolas sorteadas aparecendo na tela
   limitUsers     Int?      @default(1)
+  prizeOrder     Int[]
   price          Float?
   //rules enum
   historic       Int[]

@@ -16,10 +16,6 @@ export class CardService {
       where: { id: user.id },
       select: { room: { select: { price: true } } },
     });
-    // let cards = await this.prisma.user.findUnique({
-    //   where: { id: user.id },
-    //   select: { cards: true },
-    // });
 
     await this.prisma.user.update({
       where: { id: user.id },
@@ -37,22 +33,43 @@ export class CardService {
       vetor: generateCard,
     };
 
-    return this.prisma.card
-      .create({
-        data,
-        select: {
-          user: {
-            select: {
-              name: true,
-            },
-          },
-          vetor: true,
-        },
-      })
-      .catch(handleError);
+    return this.prisma.card.create({
+      data,
+      select: {
+      user:{
+        select:{
+          name:true,
+        }
+      },
+      id:true,
+      vetor:true
+      }
+    }).catch(handleError);
   }
 
-  async remove(id: string) {
-    return this.prisma.card.delete({ where: { id: id } });
+
+  async remove(user:User,id:string) {
+    
+    const room = await this.prisma.user.findUnique({
+      where:{id:user.id},
+      select:{room:true}
+    });
+
+    const reversalValue = await this.prisma.room.findUnique({
+      where:{id:room.room.id},
+      select:{price:true}
+    });
+    
+    await this.prisma.user.update({
+      where:{id:user.id},
+      data:{
+        wallet:{
+          increment:reversalValue.price
+        }
+      }
+    });
+
+    return this.prisma.card.delete({where:{id:id}});
+
   }
 }
