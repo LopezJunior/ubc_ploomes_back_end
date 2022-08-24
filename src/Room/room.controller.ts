@@ -14,7 +14,6 @@ import { LoggedUser } from 'src/auth/logged-user.decorator';
 import { CreateRoomDto } from './dto/create-room.dto';
 import { RoomService } from './room.service';
 
-
 @ApiTags('Room')
 @UseGuards(AuthGuard())
 @ApiBearerAuth()
@@ -46,11 +45,11 @@ export class RoomController {
   @UseGuards(AuthGuard())
   @ApiBearerAuth()
   @ApiOperation({
-    summary: 'Rota que valida se o jogador conseguiu bingar';
+    summary: 'Rota que valida se o jogador conseguiu bingar',
   })
   @Get('/room/:id/checkBingo')
   CheckBingo(@Param('id') id: string) {
-    return this.roomService.checkBingo
+    return this.roomService.checkBingo;
   }
 
   @UseGuards(AuthGuard())
@@ -60,5 +59,3 @@ export class RoomController {
     return this.roomService.delete(id);
   }
 }
-
-
