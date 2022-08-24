@@ -1,6 +1,6 @@
 import { Controller, Delete, Param, Post, UseGuards } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
-import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { LoggedUser } from 'src/auth/logged-user.decorator';
 import { User } from 'src/User/entities/user.entity';
 import { CardService } from './card.service';
@@ -13,6 +13,9 @@ import { CardService } from './card.service';
 export class CardController {
   constructor(private readonly cardService: CardService) {}
 
+  @ApiOperation({
+    summary: 'Rota para criação de cartelas',
+  })
   @Post()
   create(@LoggedUser() user:User) {
   return this.cardService.create(user);}
