@@ -6,35 +6,35 @@
 
 // console.log(bingo);
 
-export function CheckBingo(indicesBolasMarcadas) {
-  if(indicesBolasMarcadas < 5){
-    return false
+export function CheckBingo(mapIndex: number[]): boolean {
+  if (mapIndex.length < 5) {
+    return false;
   }
-  CheckLines(indicesBolasMarcadas);
-  if (CheckLines(indicesBolasMarcadas)) {
+  CheckLines(mapIndex);
+  if (CheckLines(mapIndex)) {
     return true;
   }
-  CheckDiagonals(indicesBolasMarcadas);
-  if (CheckDiagonals(indicesBolasMarcadas)) {
+  CheckDiagonals(mapIndex);
+  if (CheckDiagonals(mapIndex)) {
     return true;
   }
-  CheckCollumns(indicesBolasMarcadas);
-  if (CheckCollumns(indicesBolasMarcadas)) {
+  CheckCollumns(mapIndex);
+  if (CheckCollumns(mapIndex)) {
     return true;
   } else {
     return false;
   }
 }
 
-function CheckLines(indicesBolasMarcadas) {
+function CheckLines(mapIndex: number[]) {
   let control = 1;
 
-  let indexLine = [0, 5, 10, 15, 20];
+  const indexLine = [0, 5, 10, 15, 20];
 
   do {
-    Check(indicesBolasMarcadas, indexLine);
+    Check(mapIndex, indexLine);
 
-    if (Check(indicesBolasMarcadas, indexLine)) {
+    if (Check(mapIndex, indexLine)) {
       return true;
     }
 
@@ -46,15 +46,15 @@ function CheckLines(indicesBolasMarcadas) {
   } while (control <= 5);
 }
 
-function CheckCollumns(indicesBolasMarcadas) {
+function CheckCollumns(mapIndex: number[]) {
   let control = 1;
 
-  let indexLine = [0, 1, 2, 3, 4];
+  const indexLine = [0, 1, 2, 3, 4];
 
   do {
-    Check(indicesBolasMarcadas, indexLine);
+    Check(mapIndex, indexLine);
 
-    if (Check(indicesBolasMarcadas, indexLine)) {
+    if (Check(mapIndex, indexLine)) {
       return true;
     }
 
@@ -66,15 +66,15 @@ function CheckCollumns(indicesBolasMarcadas) {
   } while (control <= 5);
 }
 
-function CheckDiagonals(indicesBolasMarcadas) {
+function CheckDiagonals(mapIndex: number[]) {
   let control = 1;
 
   let indexLine = [0, 6, 12, 18, 24];
 
   do {
-    Check(indicesBolasMarcadas, indexLine);
+    Check(mapIndex, indexLine);
 
-    if (Check(indicesBolasMarcadas, indexLine)) {
+    if (Check(mapIndex, indexLine)) {
       return true;
     }
 
@@ -84,10 +84,10 @@ function CheckDiagonals(indicesBolasMarcadas) {
   } while (control <= 5);
 }
 
-function Check(indicesBolasMarcadas, indexLine) {
-  let bingo = [];
+function Check(mapIndex: number[], indexLine: number[]) {
+  const bingo = [];
 
-  indicesBolasMarcadas.forEach((index) => {
+  mapIndex.forEach((index) => {
     if (indexLine.indexOf(index) > -1) {
       bingo.push(index);
     }

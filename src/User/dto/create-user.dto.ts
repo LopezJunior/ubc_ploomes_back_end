@@ -5,31 +5,31 @@ export class CreateUserDto {
   @IsString()
   @IsNotEmpty()
   @ApiProperty({
-    description:"Nome do usuárip",
-    example: 'BlueEdtech'
+    description: 'Nome do usuário',
+    example: 'BlueEdtech',
   })
   name: string;
 
   @IsNotEmpty()
   @IsEmail()
   @ApiProperty({
-    description:"Email do usuário",
-    example: 'blueedtech@blue.com'
+    description: 'Email do usuário',
+    example: 'blueedtech@blue.com',
   })
   email: string;
 
   @IsString()
   @IsNotEmpty()
   @ApiProperty({
-    description:"Senha do usuário",
-    example: 'Blue@123'
+    description: 'Senha do usuário',
+    example: 'Blue@123',
   })
   password: string;
 
   @IsString()
   @IsNotEmpty()
   @ApiProperty({
-    example: 'Blue@123'
+    example: 'Blue@123',
   })
   confirmPassword: string;
 }

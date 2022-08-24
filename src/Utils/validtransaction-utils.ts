@@ -1,5 +1,5 @@
-import { Room } from "src/Room/entities/room-entity";
 import { User } from "src/User/entities/user.entity";
+
 
 export async function ValidTransaction(user:User,cardPrice:number){
 
@@ -8,5 +8,4 @@ export async function ValidTransaction(user:User,cardPrice:number){
   } else {
     return  true;
   }
-      
 }

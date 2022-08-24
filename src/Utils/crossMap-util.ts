@@ -2,13 +2,16 @@
 // Recebe lista de números da cartela (card) e lista dos números marcados já verificados (prizeNumbers)
 // Objetivo da função é gerar uma lista que facilite a validação de bingo
 
-export function CrossMap(card, prizeNumbers) {
-  const list = [];
+export function CrossMap(
+  cardNumbers: number[],
+  prizeNumbers: number[],
+): number[] {
+  const mapIndex = [];
   prizeNumbers.forEach((num) => {
-    const n = card.indexOf(num);
+    const n = cardNumbers.indexOf(num);
     if (n != -1) {
-      list.push(n);
+      mapIndex.push(n);
     }
   });
-  return list;
+  return mapIndex;
 }

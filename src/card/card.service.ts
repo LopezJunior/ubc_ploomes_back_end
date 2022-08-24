@@ -1,32 +1,41 @@
-import { Injectable, UnprocessableEntityException } from '@nestjs/common';
-import { Prisma} from '@prisma/client';
+import { Injectable } from '@nestjs/common';
+import { Prisma } from '@prisma/client';
 import { User } from 'src/User/entities/user.entity';
-import { Room} from 'src/Room/entities/room-entity';
-import { LoggedUser } from 'src/auth/logged-user.decorator';
+import { PrismaService } from 'src/prisma/prisma.service';
 import { CreateCard } from 'src/Utils/createCard-utils';
 import { handleError } from 'src/Utils/handleError.utils';
-import { PrismaService } from 'src/prisma/prisma.service';
 
 @Injectable()
 export class CardService {
-  delete(id: string) {
-    throw new Error('Method not implemented.');
-  }
   constructor(private readonly prisma: PrismaService) {}
 
-   async create(user:User) {
-    
-    let generateCard = CreateCard();
-    
-    let cards = await this.prisma.user.findUnique({where:{id:user.id},select:{cards:true}});
-    
+  async create(user: User) {
+    const generateCard = CreateCard();
+
+    const priceCard = await this.prisma.user.findUnique({
+      where: { id: user.id },
+      select: { room: { select: { price: true } } },
+    });
+    // let cards = await this.prisma.user.findUnique({
+    //   where: { id: user.id },
+    //   select: { cards: true },
+    // });
+
+    await this.prisma.user.update({
+      where: { id: user.id },
+      data: {
+        wallet: user.wallet - priceCard.room.price,
+      },
+    });
+
+
     const data: Prisma.CardCreateInput = {
-      user:{
-        connect:{
-          id:user.id
-        }
-      }, 
-      vetor:generateCard,
+      user: {
+        connect: {
+          id: user.id,
+        },
+      },
+      vetor: generateCard,
     };
 
     return this.prisma.card.create({
@@ -66,5 +75,6 @@ export class CardService {
     });
 
     return this.prisma.card.delete({where:{id:id}});
+
   }
 }
