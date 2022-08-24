@@ -1,13 +1,11 @@
-import { User } from 'src/User/entities/user.entity';
+import { Card } from '@prisma/client';
 
-export async function PunishUser(user: User) {
-  const cards = user.cards.length; // descobre quantas cartelas o jogador possui e usa como limite
+export function PunishUser(cards: Card[]): string {
+  const totalCards = cards.length; // descobre quantas cartelas o jogador possui e usa como limite
 
-  const index = Math.floor(Math.random() * cards); // limite definindo abrangência do random, devolvendo um índice
+  const index = Math.floor(Math.random() * totalCards); // limite definindo abrangência do random, devolvendo um índice
 
-  const id = user.cards[index].id;
+  const deletedCardId = cards[index].id;
 
-  await this.PrismaService.card.delete({ where: id }); // Deleta uma cartela randômica
-
-  return { message: `${user.name} declarou bingo em falso!` };
+  return deletedCardId;
 }

@@ -5,6 +5,6 @@ export class Card {
   vetor: number[];
   markings?: number[];
   userId: User;
-  createdAt: Date;
-  updatedAt: Date;
+  createdAt?: Date;
+  updatedAt?: Date;
 }
