@@ -1,12 +1,11 @@
-import { User } from 'src/User/entities/user.entity';
+import { Room } from 'src/Room/entities/room-entity';
 
-export async function AwardUser(winner: User, totalCards: number) {
-  const countUsers = winner.room.users.length;
-  let winnerWallet = winner.wallet;
+export async function AwardUser(room: Room, totalCards: number) {
+  const countUsers = room.users.length;
 
   if (countUsers < 2) {
-    return (winnerWallet += 50);
+    return room.price * 5;
   } else {
-    return (winnerWallet += totalCards * winner.room.price);
+    return totalCards * room.price;
   }
 }
