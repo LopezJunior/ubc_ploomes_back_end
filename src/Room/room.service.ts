@@ -2,22 +2,20 @@
 import { Injectable } from '@nestjs/common';
 import { Prisma } from '@prisma/client';
 import { CardService } from 'src/card/card.service';
+import { Card } from 'src/card/entities/card.entity';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { User } from 'src/User/entities/user.entity';
-import { handleError } from 'src/Utils/handleError.utils';
-import { ValidTransaction } from 'src/Utils/validtransaction-utils';
-import { CreateRoomDto } from './dto/create-room.dto';
-import { Card } from 'src/card/entities/card.entity';
 import { CheckBingo } from 'src/Utils/checkBingo';
 import { Compare } from 'src/Utils/compare';
 import { CrossMap } from 'src/Utils/crossMap-util';
-import { CreateCard } from 'src/Utils/createCard-utils';
+import { handleError } from 'src/Utils/handleError.utils';
 import { PrizeDraw } from 'src/Utils/prizeDraw-util';
+import { ValidTransaction } from 'src/Utils/validtransaction-utils';
+import { CreateRoomDto } from './dto/create-room.dto';
 
 
 @Injectable()
 export class RoomService {
-  CardService: any;
   constructor(
     private readonly prisma: PrismaService,
     private readonly cardService: CardService,
@@ -25,6 +23,8 @@ export class RoomService {
 
   async create(user: User, dto: CreateRoomDto) {
     const roomList = await this.prisma.room.findMany();
+
+    // Função usada para gerar um número para a sala
     let numberGenerate = 1;
 
     for (let x = 0; x < roomList.length; x++) {
@@ -34,13 +34,15 @@ export class RoomService {
       }
     }
 
+    //
+
     const data: Prisma.RoomCreateInput = {
       number: numberGenerate,
       maxCards: dto.maxCards,
       limitPrizeDraw: dto.limitPrizeDraw,
       limitRecord: dto.limitRecord,
       limitUsers: dto.limitUsers,
-      price:10,
+      price: 10 * dto.maxCards,
       frequency: dto.frequency,
       users: {
         connect: {
@@ -51,9 +53,11 @@ export class RoomService {
 
     data.prizeOrder = PrizeDraw(data.limitPrizeDraw);
 
+    // Const room necessária para acessar o valor do card
     const room = await this.prisma.room.create({ data }).catch(handleError);
     let card = undefined;
     let cardList = [];
+    //
 
     const cardPrice = await this.prisma.room.findUnique({
       where:{id:room.id},
@@ -62,6 +66,7 @@ export class RoomService {
         }
       });
 
+    // Verifica se o usuário tem dinheiro suficiente
     const validTransaction = await ValidTransaction(user,cardPrice.price);
 
     if(validTransaction === false){
@@ -75,23 +80,15 @@ export class RoomService {
             decrement: cardPrice.price * dto.maxCards
           }
         }
-      });  
-
-      const cardData: Prisma.CardCreateInput = {
-        user: {
-          connect: {
-            id: user.id,
-          },
-        },
-        vetor:[]
-      };
+      });
+      // 
 
       if(data.maxCards == 1){
         let card = 
-        await this.cardService.create({})  
+        await this.cardService.create(user);
       }else{
         for(let x = 0 ; x < data.maxCards ; x++){
-          await this.cardService.create({})
+          await this.cardService.create(user);
         }
       }   
     }

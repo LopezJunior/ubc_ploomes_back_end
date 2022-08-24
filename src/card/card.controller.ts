@@ -13,9 +13,9 @@ import { CardService } from './card.service';
 export class CardController {
   constructor(private readonly cardService: CardService) {}
 
-  //@Post()
-  //create(@LoggedUser() user:User) {
-  //  return this.cardService.create(user);}
+  @Post()
+  create(@LoggedUser() user:User) {
+  return this.cardService.create(user);}
 
   //@Delete(':id')
   //remove(@LoggedUser() user:User,@Param('id') id:string) {

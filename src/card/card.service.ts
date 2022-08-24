@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { Prisma } from '@prisma/client';
-import { User } from 'src/User/entities/user.entity';
 import { PrismaService } from 'src/prisma/prisma.service';
+import { User } from 'src/User/entities/user.entity';
 import { CreateCard } from 'src/Utils/createCard-utils';
 import { handleError } from 'src/Utils/handleError.utils';
 
@@ -16,10 +16,6 @@ export class CardService {
       where: { id: user.id },
       select: { room: { select: { price: true } } },
     });
-    // let cards = await this.prisma.user.findUnique({
-    //   where: { id: user.id },
-    //   select: { cards: true },
-    // });
 
     await this.prisma.user.update({
       where: { id: user.id },
@@ -27,7 +23,6 @@ export class CardService {
         wallet: user.wallet - priceCard.room.price,
       },
     });
-
 
     const data: Prisma.CardCreateInput = {
       user: {
