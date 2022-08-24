@@ -48,7 +48,8 @@ export class CreateRoomDto {
   @Max(15)
   @IsNumber()
   @ApiProperty({
-    description: 'Tempo de sorteio entre uma bola e outra, em segundos (entre 1 e 15)',
+    description:
+      'Tempo de sorteio entre uma bola e outra, em segundos (entre 1 e 15)',
     example: 10,
   })
   frequency: number;

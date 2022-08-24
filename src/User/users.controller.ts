@@ -51,7 +51,9 @@ export class UsersController {
   @UseGuards(AuthGuard())
   @ApiBearerAuth()
   @Get('/ranking/user/:id')
-  @ApiOperation({ summary: 'Rota responsável pela visualização de um usuário pelo Id.' })
+  @ApiOperation({
+    summary: 'Rota responsável pela visualização de um usuário pelo Id.',
+  })
   findOne(@Param('id') id: string) {
     return this.usersService.findOne(id);
   }
