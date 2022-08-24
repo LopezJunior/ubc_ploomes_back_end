@@ -11,6 +11,8 @@ import { Card } from 'src/card/entities/card.entity';
 import { CheckBingo } from 'src/Utils/checkBingo';
 import { Compare } from 'src/Utils/compare';
 import { CrossMap } from 'src/Utils/crossMap-util';
+import { CreateCard } from 'src/Utils/createCard-utils';
+import { PrizeDraw } from 'src/Utils/prizeDraw-util';
 
 
 @Injectable()
@@ -47,8 +49,11 @@ export class RoomService {
       },
     };
 
+    data.prizeOrder = PrizeDraw(data.limitPrizeDraw);
+
     const room = await this.prisma.room.create({ data }).catch(handleError);
-    const card = await this.cardService.create(user);
+    let card = undefined;
+    let cardList = [];
 
     const cardPrice = await this.prisma.room.findUnique({
       where:{id:room.id},
@@ -61,17 +66,34 @@ export class RoomService {
 
     if(validTransaction === false){
       await this.prisma.room.delete({where:{id:room.id}}).catch(handleError);
-      await this.prisma.card.delete({where:{id:card.id}});
       return {message:"Saldo insuficiente"};// parar o código aqui!
     }else{
       await this.prisma.user.update({
         where:{id:user.id},
         data:{
-          wallet: user.wallet - cardPrice.price
+          wallet:{
+            decrement: cardPrice.price * dto.maxCards
+          }
         }
-      });
-  
-      return {room,card};
+      });  
+
+      const cardData: Prisma.CardCreateInput = {
+        user: {
+          connect: {
+            id: user.id,
+          },
+        },
+        vetor:[]
+      };
+
+      if(data.maxCards == 1){
+        let card = 
+        await this.cardService.create({})  
+      }else{
+        for(let x = 0 ; x < data.maxCards ; x++){
+          await this.cardService.create({})
+        }
+      }   
     }
   }
 
