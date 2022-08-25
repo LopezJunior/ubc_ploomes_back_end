@@ -21,6 +21,7 @@ https://ubc-backend.herokuapp.com/api/
 ```
 https://github.com/LopezJunior/ubc_ploomes_back_end
 ```
+```
 https://github.com/LopezJunior/ubc_ploomes_front_end
 ```
 
@@ -56,7 +57,7 @@ $ npm run start:prod
 * NestJS
 * PostgreSQL
 * Swagger
-* railway
+* railway / Vercel / Heroku
 * Compodoc
 * Cors
 * JWT
