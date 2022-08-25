@@ -32,8 +32,6 @@ export class RoomService {
       }
     }
 
-    //
-
     const data: Prisma.RoomCreateInput = {
       number: numberGenerate,
       maxCards: dto.maxCards,
@@ -55,15 +53,21 @@ export class RoomService {
     const room = await this.prisma.room.create({ data }).catch(handleError);
     //
 
-    // const cardPrice = await this.prisma.room.findUnique({
-    //   where: { id: room.id },
-    //   select: {
-    //     price: true,
-    //   },
-    // });
+    const cardPrice = await this.prisma.room.findUnique({
+      where: { id: room.id },
+      select: {
+        price: true,
+      },
+    });
 
     // Verifica se o usuário tem dinheiro suficiente
-    // const validTransaction = await ValidTransaction(user);
+    let validTransaction;
+
+    if (user.wallet < cardPrice.price) {
+      validTransaction = false;
+    } else {
+      validTransaction = true;
+    }
 
     if (validTransaction === false) {
       await this.prisma.room
@@ -80,13 +84,15 @@ export class RoomService {
         },
       });
       //
-
+      const cards = [];
       if (data.maxCards == 1) {
-        await this.cardService.create(user);
+        cards.push(await this.cardService.create(user));
+        return { room, cards };
       } else {
         for (let x = 0; x < data.maxCards; x++) {
-          await this.cardService.create(user);
+          cards.push(await this.cardService.create(user));
         }
+        return { room, cards };
       }
     }
   }

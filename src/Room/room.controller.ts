@@ -25,6 +25,9 @@ export class RoomController {
 
   @UseGuards(AuthGuard())
   @ApiBearerAuth()
+  @ApiOperation({
+    summary: 'Rota responsável por criar uma sala para a partida',
+  })
   @Post('/room')
   create(@LoggedUser() user: User, @Body() dto: CreateRoomDto) {
     return this.roomService.create(user, dto);
@@ -32,6 +35,9 @@ export class RoomController {
 
   @UseGuards(AuthGuard())
   @ApiBearerAuth()
+  @ApiOperation({
+    summary: 'Rota que localiza a sala de jogo pelo Id',
+  })
   @Get('/room/:id')
   FindById(@Param('id') id: string) {
     return this.roomService.findById(id);
@@ -39,6 +45,9 @@ export class RoomController {
 
   @UseGuards(AuthGuard())
   @ApiBearerAuth()
+  @ApiOperation({
+    summary: 'Rota responsável por resetar a partida',
+  })
   @Get('/room/resetRoom')
   resetRoom(@LoggedUser() user: User) {
     return this.roomService.resetRoom(user);
@@ -56,6 +65,9 @@ export class RoomController {
 
   @UseGuards(AuthGuard())
   @ApiBearerAuth()
+  @ApiOperation({
+    summary: 'Rota que exclui a sala após o término da partida',
+  })
   @Delete('/room/:id/withdrawRoom')
   delete(@Param('id') id: string) {
     return this.roomService.delete(id);
