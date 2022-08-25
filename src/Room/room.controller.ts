@@ -4,6 +4,7 @@ import {
   Delete,
   Get,
   Param,
+  Patch,
   Post,
   UseGuards,
 } from '@nestjs/common';
@@ -11,6 +12,7 @@ import { AuthGuard } from '@nestjs/passport';
 import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { User } from '@prisma/client';
 import { LoggedUser } from 'src/auth/logged-user.decorator';
+import { checkBingoDto } from './dto/checkBingo.dto';
 import { CreateRoomDto } from './dto/create-room.dto';
 import { RoomService } from './room.service';
 
@@ -56,9 +58,9 @@ export class RoomController {
   @ApiOperation({
     summary: 'Rota que valida se o jogador conseguiu bingar',
   })
-  @Get('/room/:id/checkBingo')
-  CheckBingo(@Param('id') id: string) {
-    return this.roomService.checkBingo;
+  @Patch('/room/:id/checkBingo')
+  CheckBingo(@LoggedUser() user: User, @Body() dto: checkBingoDto) {
+    return this.roomService.checkBingo(user, dto);
   }
 
   @UseGuards(AuthGuard())
