@@ -28,6 +28,7 @@ https://github.com/LopezJunior/ubc_ploomes_front_end
 
 ```
 npm install
+
 ```
 
 ## Criando tabelas no banco de dados local
@@ -39,6 +40,7 @@ npx prisma db push
 ## Rodando o app
 
 ```
+
 # development
 $ npm run start
 
