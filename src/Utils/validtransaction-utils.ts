@@ -1,12 +1,11 @@
-import { User } from '@prisma/client';
+import { User } from 'src/User/entities/user.entity';
 
 export async function ValidTransaction(user: User) {
   const cardPrice = user.room.price;
-  let validTransaction: boolean;
-
+  
   if (user.wallet < cardPrice) {
-    return  false;    
+    return false;
   } else {
-    return  true;
+    return true;
   }
 }

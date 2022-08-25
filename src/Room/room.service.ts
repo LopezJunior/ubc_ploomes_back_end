@@ -9,6 +9,7 @@ import { Compare } from 'src/Utils/compare';
 import { CrossMap } from 'src/Utils/crossMap-util';
 import { handleError } from 'src/Utils/handleError.utils';
 import { PrizeDraw } from 'src/Utils/prizeDraw-util';
+import { PunishUser } from 'src/Utils/punishUser - util';
 import { ValidTransaction } from 'src/Utils/validtransaction-utils';
 import { CreateRoomDto } from './dto/create-room.dto';
 
@@ -31,11 +32,11 @@ export class RoomService {
         x--;
       }
     }
-    //
+
 
     const data: Prisma.RoomCreateInput = {
       number: numberGenerate,
-      maxCards: dto.maxCards,
+      maxCards: dto.maxCards,      
       limitPrizeDraw: dto.limitPrizeDraw,
       limitRecord: dto.limitRecord,
       limitUsers: dto.limitUsers,
@@ -52,42 +53,41 @@ export class RoomService {
 
     // Const room necessária para acessar o valor do card
     const room = await this.prisma.room.create({ data }).catch(handleError);
-    let card = undefined;
-    let cardList = [];
     //
 
-    const cardPrice = await this.prisma.room.findUnique({
-      where:{id:room.id},
-      select:{
-         price:true
-        }
-      });
+    // const cardPrice = await this.prisma.room.findUnique({
+    //   where: { id: room.id },
+    //   select: {
+    //     price: true,
+    //   },
+    // });
 
     // Verifica se o usuário tem dinheiro suficiente
-    const validTransaction = await ValidTransaction(user,cardPrice.price);
+    const validTransaction = await ValidTransaction(user);
 
-    if(validTransaction === false){
-      await this.prisma.room.delete({where:{id:room.id}}).catch(handleError);
-      return {message:"Saldo insuficiente"};// parar o código aqui!
-    }else{
+    if (validTransaction === false) {
+      await this.prisma.room
+        .delete({ where: { id: room.id } })
+        .catch(handleError);
+      return { message: 'Saldo insuficiente' }; // parar o código aqui!
+    } else {
       await this.prisma.user.update({
-        where:{id:user.id},
-        data:{
-          wallet:{
-            decrement: cardPrice.price * dto.maxCards
-          }
-        }
+        where: { id: user.id },
+        data: {
+          wallet: {
+            decrement: data.price,
+          },
+        },
       });
-      // 
+      //
 
-      if(data.maxCards == 1){
-        let card = 
+      if (data.maxCards == 1) {
         await this.cardService.create(user);
-      }else{
-        for(let x = 0 ; x < data.maxCards ; x++){
+      } else {
+        for (let x = 0; x < data.maxCards; x++) {
           await this.cardService.create(user);
         }
-      }   
+      }
     }
   }
 
@@ -96,9 +96,7 @@ export class RoomService {
   }
 
   async resetRoom(user: User) {
-
     await this.prisma.card.deleteMany({ where: { userID: user.id } });
-
 
     const room = await this.prisma.user.findUnique({
       where: { id: user.id },
