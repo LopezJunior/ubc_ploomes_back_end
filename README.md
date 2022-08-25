@@ -15,7 +15,6 @@ https://ploomes-dev.vercel.app/login
 ```
 https://ubc-backend.herokuapp.com/api/
 ```
-
 ## Para clonar o projeto
 
 ```
@@ -48,6 +47,16 @@ $ npm run start:dev
 
 # production mode
 $ npm run start:prod
+```
+
+## Compodoc
+
+```
+# Install
+npm i -D @compodoc/compodoc
+
+# Doc Generate , run and Doc update 
+npx @compodoc/compodoc -p tsconfig.json -s
 ```
 
 ## Priscipais ferramentas utilizadas
