@@ -6,11 +6,12 @@ import { PrismaModule } from './prisma/prisma.module';
 import { UsersModule } from './User/users.module';
 import { RoomModule } from './Room/room.module';
 import { CardModule } from './card/card.module';
-import { AppGateway } from './app.gateway';
+// import { AppGateway } from './app.gateway';
 
 @Module({
   imports: [UsersModule, AuthModule, PrismaModule, RoomModule, CardModule],
   controllers: [AppController],
-  providers: [AppService, AppGateway],
+  providers: [AppService], //, AppGateway],
 })
 export class AppModule {}
+
