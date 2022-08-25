@@ -58,7 +58,7 @@ export class RoomController {
   @ApiOperation({
     summary: 'Rota que valida se o jogador conseguiu bingar',
   })
-  @Patch('/room/:id/checkBingo')
+  @Patch('/room/checkBingo')
   CheckBingo(@LoggedUser() user: User, @Body() dto: checkBingoDto) {
     return this.roomService.checkBingo(user, dto);
   }
