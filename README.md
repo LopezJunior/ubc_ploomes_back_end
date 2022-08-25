@@ -21,6 +21,7 @@ https://ubc-backend.herokuapp.com/api/
 ```
 https://github.com/LopezJunior/ubc_ploomes_back_end
 ```
+```
 https://github.com/LopezJunior/ubc_ploomes_front_end
 ```
 
@@ -28,6 +29,7 @@ https://github.com/LopezJunior/ubc_ploomes_front_end
 
 ```
 npm install
+
 ```
 
 ## Criando tabelas no banco de dados local
@@ -39,6 +41,7 @@ npx prisma db push
 ## Rodando o app
 
 ```
+
 # development
 $ npm run start
 
