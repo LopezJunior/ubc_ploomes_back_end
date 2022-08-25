@@ -1,7 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { Prisma, User } from '@prisma/client';
 import { CardService } from 'src/card/card.service';
-import { Card } from 'src/card/entities/card.entity';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { AwardUser } from 'src/Utils/award-utils';
 import { CheckBingo } from 'src/Utils/checkBingo';
@@ -10,7 +9,7 @@ import { CrossMap } from 'src/Utils/crossMap-util';
 import { handleError } from 'src/Utils/handleError.utils';
 import { PrizeDraw } from 'src/Utils/prizeDraw-util';
 import { PunishUser } from 'src/Utils/punishUser - util';
-import { ValidTransaction } from 'src/Utils/validtransaction-utils';
+import { checkBingoDto } from './dto/checkBingo.dto';
 import { CreateRoomDto } from './dto/create-room.dto';
 
 @Injectable()
@@ -36,7 +35,7 @@ export class RoomService {
 
     const data: Prisma.RoomCreateInput = {
       number: numberGenerate,
-      maxCards: dto.maxCards,      
+      maxCards: dto.maxCards,
       limitPrizeDraw: dto.limitPrizeDraw,
       limitRecord: dto.limitRecord,
       limitUsers: dto.limitUsers,
@@ -55,15 +54,21 @@ export class RoomService {
     const room = await this.prisma.room.create({ data }).catch(handleError);
     //
 
-    // const cardPrice = await this.prisma.room.findUnique({
-    //   where: { id: room.id },
-    //   select: {
-    //     price: true,
-    //   },
-    // });
+    const cardPrice = await this.prisma.room.findUnique({
+      where: { id: room.id },
+      select: {
+        price: true,
+      },
+    });
 
     // Verifica se o usuário tem dinheiro suficiente
-    const validTransaction = await ValidTransaction(user);
+    let validTransaction;
+
+    if (user.wallet < cardPrice.price) {
+      validTransaction = false;
+    } else {
+      validTransaction = true;
+    }
 
     if (validTransaction === false) {
       await this.prisma.room
@@ -80,13 +85,15 @@ export class RoomService {
         },
       });
       //
-
+      const cards = [];
       if (data.maxCards == 1) {
-        await this.cardService.create(user);
+        cards.push(await this.cardService.create(user));
+        return { room, cards };
       } else {
         for (let x = 0; x < data.maxCards; x++) {
-          await this.cardService.create(user);
+          cards.push(await this.cardService.create(user));
         }
+        return { room, cards };
       }
     }
   }
@@ -112,12 +119,14 @@ export class RoomService {
     return await this.create(user, data);
   }
 
-  async checkBingo(user: User, cards: Card[], roomId: string) {
-    const room = await this.prisma.room.findUnique({
-      where: { id: roomId },
-      include: { users: true },
-    });
-    const prizeDraw = room.historic; // lista de bolas já sorteadas
+  async checkBingo(user: User, dto: checkBingoDto) {
+    // const room = await this.prisma.room.findUnique({
+    //   where: { id: roomId },
+    //   include: { users: true },
+    // });
+    const room = dto.room;
+    const cards = dto.cards;
+    const prizeDraw = dto.room.historic; // lista de bolas já sorteadas
 
     cards.forEach(async (card) => {
       const markedNumbers = card.markings; // Numeros marcados da cartela

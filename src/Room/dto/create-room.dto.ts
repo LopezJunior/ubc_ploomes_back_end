@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsInt, IsNumber, Max, Min } from 'class-validator';
+import { IsInt, IsNumber, IsOptional, Max, Min } from 'class-validator';
 
 export class CreateRoomDto {
   @Min(1)
@@ -7,7 +7,7 @@ export class CreateRoomDto {
   @IsNumber()
   @ApiProperty({
     description: 'Número de cartelas que deseja adquirir (entre 1 e 4)',
-    example: 5,
+    example: 3,
   })
   maxCards: number;
 
@@ -16,7 +16,7 @@ export class CreateRoomDto {
   @IsNumber()
   @ApiProperty({
     description: 'Limite de sorteios (entre 10 e 75)',
-    example: 5,
+    example: 30,
   })
   limitPrizeDraw: number;
 
@@ -31,6 +31,7 @@ export class CreateRoomDto {
 
   @IsInt()
   @IsNumber()
+  @IsOptional()
   @ApiProperty({
     description: 'Limite de jogadores na sala',
     example: 3,

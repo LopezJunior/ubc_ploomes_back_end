@@ -1,3 +1,7 @@
+import { Card } from 'src/card/entities/card.entity';
+import { Room } from '../entities/room-entity';
+
 export class checkBingoDto {
-  bolasMarcadas: number[];
+  room: Room;
+  cards: Card[];
 }
