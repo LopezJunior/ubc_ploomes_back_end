@@ -1,4 +1,3 @@
-
 import { Injectable } from '@nestjs/common';
 import { Prisma } from '@prisma/client';
 import { CardService } from 'src/card/card.service';
@@ -12,7 +11,6 @@ import { handleError } from 'src/Utils/handleError.utils';
 import { PrizeDraw } from 'src/Utils/prizeDraw-util';
 import { ValidTransaction } from 'src/Utils/validtransaction-utils';
 import { CreateRoomDto } from './dto/create-room.dto';
-
 
 @Injectable()
 export class RoomService {
@@ -33,7 +31,6 @@ export class RoomService {
         x--;
       }
     }
-
     //
 
     const data: Prisma.RoomCreateInput = {
