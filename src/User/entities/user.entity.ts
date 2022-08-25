@@ -1,4 +1,4 @@
-import { Room } from 'src/Room/entities/room-entity';
+import { Room } from '@prisma/client';
 import { Card } from '../../card/entities/card.entity';
 
 export class User {
@@ -11,7 +11,8 @@ export class User {
   wins?: number;
   withdraws?: number;
   cards?: Card[];
-  room: Room;
+  room?: Room;
+  roomID?: string;
   createdAt?: Date;
   updatedAt?: Date;
 }

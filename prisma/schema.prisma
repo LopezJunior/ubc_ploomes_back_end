@@ -30,9 +30,9 @@ model Room {
   id             String    @id @default(uuid())
   number         Int?
   users          User[]
-  maxCards       Int?      @default(2)
-  limitPrizeDraw Int?      @default(50)
-  limitRecord    Int?      @default(6)
+  maxCards       Int?      @default(2) // número de cartelas compradas
+  limitPrizeDraw Int?      @default(50) // limite de sorteios
+  limitRecord    Int?      @default(6)  // limite de bolas sorteadas aparecendo na tela
   limitUsers     Int?      @default(1)
   prizeOrder     Int[]
   price          Float?

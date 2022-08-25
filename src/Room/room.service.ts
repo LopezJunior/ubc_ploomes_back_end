@@ -1,9 +1,9 @@
 import { Injectable } from '@nestjs/common';
-import { Prisma } from '@prisma/client';
+import { Prisma, User } from '@prisma/client';
 import { CardService } from 'src/card/card.service';
 import { Card } from 'src/card/entities/card.entity';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { User } from 'src/User/entities/user.entity';
+import { AwardUser } from 'src/Utils/award-utils';
 import { CheckBingo } from 'src/Utils/checkBingo';
 import { Compare } from 'src/Utils/compare';
 import { CrossMap } from 'src/Utils/crossMap-util';
@@ -117,10 +117,11 @@ export class RoomService {
   async checkBingo(user: User, cards: Card[], roomId: string) {
     const room = await this.prisma.room.findUnique({
       where: { id: roomId },
+      include: { users: true },
     });
     const prizeDraw = room.historic; // lista de bolas já sorteadas
 
-    cards.forEach((card) => {
+    cards.forEach(async (card) => {
       const markedNumbers = card.markings; // Numeros marcados da cartela
       const cardNumbers = card.vetor;
 
@@ -130,11 +131,39 @@ export class RoomService {
 
       const KO = CheckBingo(mapIndex); // Boolean de validação do bingo
 
-      // if (KO) {
-      //   AwardUser(user); // , room);
-      // } else {
-      //   PunishUser(user);
-      // }
+      if (KO) {
+        const countUsers = room.users.length;
+        let totalCards = 0;
+        const userIdList = room.users;
+
+        for (let x = 0; x < countUsers; x++) {
+          const recordUser = await PrismaService.user.findUnique({
+            where: { id: userIdList[0].id },
+          });
+          totalCards += recordUser.cards.length;
+        }
+
+        const roomPrize = await AwardUser(room, totalCards); // , room);
+        user.wallet += roomPrize;
+
+        const data: Prisma.UserUpdateInput = user;
+
+        this.prisma.user.update({ data, where: { id: user.id } });
+
+        return {
+          message: `O ${user.name} foi o campeão da rodada por KnockOut!`,
+        };
+      } else {
+        const cards = await this.prisma.card.findMany({
+          where: { userID: user.id },
+        });
+
+        const deletedCardId = PunishUser(cards);
+
+        await this.prisma.card.delete({ where: { id: deletedCardId } });
+
+        return { message: `${user.name} declarou bingo em falso!` };
+      }
     });
   }
 
