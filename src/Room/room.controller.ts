@@ -48,8 +48,8 @@ export class RoomController {
     summary: 'Rota que valida se o jogador conseguiu bingar',
   })
   @Get('/room/:id/checkBingo')
-  CheckBingo(@Param('id') id: string) {
-    return this.roomService.checkBingo;
+  CheckBingo(@Param('id') id: string, @LoggedUser() user: User) {
+    return this.roomService.checkBingo();
   }
 
   @UseGuards(AuthGuard())

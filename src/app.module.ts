@@ -14,4 +14,3 @@ import { CardModule } from './card/card.module';
   providers: [AppService], //, AppGateway],
 })
 export class AppModule {}
-
