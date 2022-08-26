@@ -95,6 +95,13 @@ export class UsersService {
     const id = user.id;
     return await this.prisma.user.findUnique({
       where: { id },
+      select:{
+        id:true,
+        name:true,
+        email:true,
+        wallet:true,
+        wins:true
+      }
     });
   }
 
