@@ -124,7 +124,13 @@ export class UsersService {
       .update({
         where: { id },
         data,
-        select: { id: true, name: true, password: false },
+        select: { 
+          id: true, 
+          name: true, 
+          password: false,
+          createdAt: true,
+          updatedAt: true, 
+        },
       })
       .catch(handleError);
   }
