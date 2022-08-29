@@ -4,7 +4,7 @@ export class Card {
   id?: string;
   vetor: number[];
   markings?: number[];
-  userId: User;
+  userId?: User;
   createdAt?: Date;
   updatedAt?: Date;
 }
