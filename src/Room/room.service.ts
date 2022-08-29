@@ -19,7 +19,7 @@ export class RoomService {
   ) {}
 
   async create(user: User, dto: CreateRoomDto) {
-    const roomList = await this.prisma.room.findMany();
+    const roomList = await this.prisma.room.findMany().catch(handleError);
 
     // Função usada para gerar um número para a sala
     let numberGenerate = 1;
@@ -52,12 +52,14 @@ export class RoomService {
     const room = await this.prisma.room.create({ data }).catch(handleError);
     //
 
-    const cardPrice = await this.prisma.room.findUnique({
-      where: { id: room.id },
-      select: {
-        price: true,
-      },
-    });
+    const cardPrice = await this.prisma.room
+      .findUnique({
+        where: { id: room.id },
+        select: {
+          price: true,
+        },
+      })
+      .catch(handleError);
 
     // Verifica se o usuário tem dinheiro suficiente
     let validTransaction;
@@ -74,22 +76,24 @@ export class RoomService {
         .catch(handleError);
       return { message: 'Saldo insuficiente' }; // parar o código aqui!
     } else {
-      await this.prisma.user.update({
-        where: { id: user.id },
-        data: {
-          wallet: {
-            decrement: data.price,
+      await this.prisma.user
+        .update({
+          where: { id: user.id },
+          data: {
+            wallet: {
+              decrement: data.price,
+            },
           },
-        },
-      });
+        })
+        .catch(handleError);
       //
       const cards = [];
       if (data.maxCards == 1) {
-        cards.push(await this.cardService.create(user));
+        cards.push(await this.cardService.create(user).catch(handleError));
         return { room, cards };
       } else {
         for (let x = 0; x < data.maxCards; x++) {
-          cards.push(await this.cardService.create(user));
+          cards.push(await this.cardService.create(user).catch(handleError));
         }
         return { room, cards };
       }
@@ -97,24 +101,34 @@ export class RoomService {
   }
 
   async findById(id: string) {
-    return this.prisma.room.findUnique({ where: { id: id } });
+    return this.prisma.room
+      .findUnique({ where: { id: id } })
+      .catch(handleError);
   }
 
   async resetRoom(user: User) {
-    await this.prisma.card.deleteMany({ where: { userID: user.id } });
+    await this.prisma.card
+      .deleteMany({ where: { userID: user.id } })
+      .catch(handleError);
 
-    const room = await this.prisma.user.findUnique({
-      where: { id: user.id },
-      select: { room: true },
-    });
+    const room = await this.prisma.user
+      .findUnique({
+        where: { id: user.id },
+        select: { room: true },
+      })
+      .catch(handleError);
 
-    const data = await this.prisma.room.findUnique({
-      where: { id: room.room.id },
-    });
+    const data = await this.prisma.room
+      .findUnique({
+        where: { id: room.room.id },
+      })
+      .catch(handleError);
 
-    await this.prisma.room.delete({ where: { id: room.room.id } });
+    await this.prisma.room
+      .delete({ where: { id: room.room.id } })
+      .catch(handleError);
 
-    return await this.create(user, data);
+    return await this.create(user, data).catch(handleError);
   }
 
   async checkBingo(user: User, dto: checkBingoDto) {
@@ -160,18 +174,24 @@ export class RoomService {
 
         const data: Prisma.UserUpdateInput = user;
 
-        this.prisma.user.update({ data, where: { id: user.id } }); // Atualiza no banco
+        this.prisma.user
+          .update({ data, where: { id: user.id } })
+          .catch(handleError); // Atualiza no banco
 
         return user.id, user.name, room.id, room.historic, card.id;
       } else {
-        const cards = await this.prisma.card.findMany({
-          // Pega todas as cartelas do usuário
-          where: { userID: user.id },
-        });
+        const cards = await this.prisma.card
+          .findMany({
+            // Pega todas as cartelas do usuário
+            where: { userID: user.id },
+          })
+          .catch(handleError);
 
         const deletedCardId = PunishUser(cards); // função que escolhe uma cartela para deletar
 
-        await this.prisma.card.delete({ where: { id: deletedCardId } }); // deleta a cartela escolhida.
+        await this.prisma.card
+          .delete({ where: { id: deletedCardId } })
+          .catch(handleError); // deleta a cartela escolhida.
 
         return user.id, user.name, room.id, room.historic;
       }
