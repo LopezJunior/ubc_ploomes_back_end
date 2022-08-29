@@ -1,5 +1,6 @@
 import {
   BadRequestException,
+  HttpException,
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
@@ -81,7 +82,6 @@ export class UsersService {
       select: {
         id: true,
         name: true,
-        password: false,
       },
     });
 
@@ -95,6 +95,13 @@ export class UsersService {
     const id = user.id;
     return await this.prisma.user.findUnique({
       where: { id },
+      select:{
+        id:true,
+        name:true,
+        email:true,
+        wallet:true,
+        wins:true
+      }
     });
   }
 
@@ -118,13 +125,20 @@ export class UsersService {
       .update({
         where: { id },
         data,
-        select: { id: true, name: true, password: false },
+        select: { 
+          id: true, 
+          name: true, 
+          password: false,
+          createdAt: true,
+          updatedAt: true, 
+        },
       })
       .catch(handleError);
   }
 
   async delete(user: User) {
     const id = user.id;
-    return await this.prisma.user.delete({ where: { id } }).catch(handleError);
-  }
+    await this.prisma.user.delete({ where: { id }}).catch(handleError);    
+    throw new HttpException('Usuário deletado com sucesso!', 200);
+  }    
 }
