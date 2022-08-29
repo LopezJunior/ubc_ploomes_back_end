@@ -19,4 +19,3 @@
 //   create(@LoggedUser() user: User) {
 //     return this.cardService.create(user);
 //   }
-

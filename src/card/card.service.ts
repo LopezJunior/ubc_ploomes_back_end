@@ -49,26 +49,26 @@ export class CardService {
       .catch(handleError);
   }
 
-  async remove(user: User, id: string) {
-    const room = await this.prisma.user.findUnique({
-      where: { id: user.id },
-      select: { room: true },
-    });
+  //   async remove(user: User, id: string) {
+  //     const room = await this.prisma.user.findUnique({
+  //       where: { id: user.id },
+  //       select: { room: true },
+  //     });
 
-    const reversalValue = await this.prisma.room.findUnique({
-      where: { id: room.room.id },
-      select: { price: true },
-    });
+  //     const reversalValue = await this.prisma.room.findUnique({
+  //       where: { id: room.room.id },
+  //       select: { price: true },
+  //     });
 
-    await this.prisma.user.update({
-      where: { id: user.id },
-      data: {
-        wallet: {
-          increment: reversalValue.price,
-        },
-      },
-    });
+  //     await this.prisma.user.update({
+  //       where: { id: user.id },
+  //       data: {
+  //         wallet: {
+  //           increment: reversalValue.price,
+  //         },
+  //       },
+  //     });
 
-    return this.prisma.card.delete({ where: { id: id } });
-  }
+  //     return this.prisma.card.delete({ where: { id: id } });
+  //   }
 }

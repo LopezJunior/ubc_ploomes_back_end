@@ -2,7 +2,6 @@ import { Injectable } from '@nestjs/common';
 import { Prisma, User } from '@prisma/client';
 import { CardService } from 'src/card/card.service';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { AwardUser } from 'src/Utils/award-utils';
 import { CheckBingo } from 'src/Utils/checkBingo';
 import { Compare } from 'src/Utils/compare';
 import { CrossMap } from 'src/Utils/crossMap-util';
@@ -31,7 +30,6 @@ export class RoomService {
         x--;
       }
     }
-
 
     const data: Prisma.RoomCreateInput = {
       number: numberGenerate,
@@ -139,37 +137,43 @@ export class RoomService {
       const KO = CheckBingo(mapIndex); // Boolean de validação do bingo
 
       if (KO) {
-        const countUsers = room.users.length;
-        let totalCards = 0;
-        const userIdList = room.users;
+        // se o usuário ganhar...
+        const countUsers = room.users.length; // contar quantos usuários a sala possui
+        const totalCards = room.maxCards * countUsers; // Quantidade total de cartas
+        // const userIdList = room.users;
 
-        for (let x = 0; x < countUsers; x++) {
-          const recordUser = await PrismaService.user.findUnique({
-            where: { id: userIdList[0].id },
-          });
-          totalCards += recordUser.cards.length;
+        // for (let x = 0; x < countUsers; x++) {
+        //   const recordUser = await PrismaService.user.findUnique({
+        //     where: { id: userIdList[0].id },
+        //   });
+        //   totalCards += recordUser.cards.length;
+        // }
+
+        // const roomPrize = await AwardUser(room, totalCards);
+
+        if (countUsers < 2) {
+          // calculo do premio da sala
+          user.wallet = room.price * 5;
+        } else {
+          user.wallet = totalCards * room.price;
         }
-
-        const roomPrize = await AwardUser(room, totalCards); // , room);
-        user.wallet += roomPrize;
 
         const data: Prisma.UserUpdateInput = user;
 
-        this.prisma.user.update({ data, where: { id: user.id } });
+        this.prisma.user.update({ data, where: { id: user.id } }); // Atualiza no banco
 
-        return {
-          message: `O ${user.name} foi o campeão da rodada por KnockOut!`,
-        };
+        return user.id, user.name, room.id, room.historic, card.id;
       } else {
         const cards = await this.prisma.card.findMany({
+          // Pega todas as cartelas do usuário
           where: { userID: user.id },
         });
 
-        const deletedCardId = PunishUser(cards);
+        const deletedCardId = PunishUser(cards); // função que escolhe uma cartela para deletar
 
-        await this.prisma.card.delete({ where: { id: deletedCardId } });
+        await this.prisma.card.delete({ where: { id: deletedCardId } }); // deleta a cartela escolhida.
 
-        return { message: `${user.name} declarou bingo em falso!` };
+        return user.id, user.name, room.id, room.historic;
       }
     });
   }
