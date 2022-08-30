@@ -1,8 +1,7 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, Injectable } from '@nestjs/common';
 import { Prisma, User } from '@prisma/client';
 import { CardService } from 'src/card/card.service';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { AwardUser } from 'src/Utils/award-utils';
 import { CheckBingo } from 'src/Utils/checkBingo';
 import { Compare } from 'src/Utils/compare';
 import { CrossMap } from 'src/Utils/crossMap-util';
@@ -11,6 +10,7 @@ import { PrizeDraw } from 'src/Utils/prizeDraw-util';
 import { PunishUser } from 'src/Utils/punishUser - util';
 import { checkBingoDto } from './dto/checkBingo.dto';
 import { CreateRoomDto } from './dto/create-room.dto';
+import { Room } from './entities/room-entity';
 
 @Injectable()
 export class RoomService {
@@ -20,7 +20,7 @@ export class RoomService {
   ) {}
 
   async create(user: User, dto: CreateRoomDto) {
-    const roomList = await this.prisma.room.findMany();
+    const roomList = await this.prisma.room.findMany().catch(handleError);
 
     // Função usada para gerar um número para a sala
     let numberGenerate = 1;
@@ -28,10 +28,9 @@ export class RoomService {
     for (let x = 0; x < roomList.length; x++) {
       if (roomList[x].number == numberGenerate) {
         numberGenerate++;
-        x--;
+        x = 0;
       }
     }
-
 
     const data: Prisma.RoomCreateInput = {
       number: numberGenerate,
@@ -54,12 +53,14 @@ export class RoomService {
     const room = await this.prisma.room.create({ data }).catch(handleError);
     //
 
-    const cardPrice = await this.prisma.room.findUnique({
-      where: { id: room.id },
-      select: {
-        price: true,
-      },
-    });
+    const cardPrice = await this.prisma.room
+      .findUnique({
+        where: { id: room.id },
+        select: {
+          price: true,
+        },
+      })
+      .catch(handleError);
 
     // Verifica se o usuário tem dinheiro suficiente
     let validTransaction;
@@ -76,22 +77,24 @@ export class RoomService {
         .catch(handleError);
       return { message: 'Saldo insuficiente' }; // parar o código aqui!
     } else {
-      await this.prisma.user.update({
-        where: { id: user.id },
-        data: {
-          wallet: {
-            decrement: data.price,
+      await this.prisma.user
+        .update({
+          where: { id: user.id },
+          data: {
+            wallet: {
+              decrement: data.price,
+            },
           },
-        },
-      });
+        })
+        .catch(handleError);
       //
       const cards = [];
       if (data.maxCards == 1) {
-        cards.push(await this.cardService.create(user));
+        cards.push(await this.cardService.create(user).catch(handleError));
         return { room, cards };
       } else {
         for (let x = 0; x < data.maxCards; x++) {
-          cards.push(await this.cardService.create(user));
+          cards.push(await this.cardService.create(user).catch(handleError));
         }
         return { room, cards };
       }
@@ -99,34 +102,41 @@ export class RoomService {
   }
 
   async findById(id: string) {
-    return this.prisma.room.findUnique({ where: { id: id } });
+    return this.prisma.room
+      .findUnique({ where: { id: id } })
+      .catch(handleError);
   }
 
   async resetRoom(user: User) {
-    await this.prisma.card.deleteMany({ where: { userID: user.id } });
+    await this.prisma.card
+      .deleteMany({ where: { userID: user.id } })
+      .catch(handleError);
 
-    const room = await this.prisma.user.findUnique({
-      where: { id: user.id },
-      select: { room: true },
-    });
+    const room = await this.prisma.user
+      .findUnique({
+        where: { id: user.id },
+        select: { room: true },
+      })
+      .catch(handleError);
 
-    const data = await this.prisma.room.findUnique({
-      where: { id: room.room.id },
-    });
+    const data = await this.prisma.room
+      .findUnique({
+        where: { id: room.room.id },
+      })
+      .catch(handleError);
 
-    await this.prisma.room.delete({ where: { id: room.room.id } });
+    await this.prisma.room
+      .delete({ where: { id: room.room.id } })
+      .catch(handleError);
 
-    return await this.create(user, data);
+    return await this.create(user, data).catch(handleError);
   }
 
   async checkBingo(user: User, dto: checkBingoDto) {
-    // const room = await this.prisma.room.findUnique({
-    //   where: { id: roomId },
-    //   include: { users: true },
-    // });
     const room = dto.room;
     const cards = dto.cards;
     const prizeDraw = dto.room.historic; // lista de bolas já sorteadas
+    let KO: boolean; // KnockOut, variável da vitória
 
     cards.forEach(async (card) => {
       const markedNumbers = card.markings; // Numeros marcados da cartela
@@ -136,46 +146,66 @@ export class RoomService {
 
       const mapIndex = CrossMap(cardNumbers, prizeNumbers); // Indices das marcações válidas na cartela
 
-      const KO = CheckBingo(mapIndex); // Boolean de validação do bingo
+      KO = CheckBingo(mapIndex); // Boolean de validação do bingo
 
       if (KO) {
-        const countUsers = room.users.length;
-        let totalCards = 0;
-        const userIdList = room.users;
+        // se o usuário ganhar...
+        const countUsers = room.users.length; // contar quantos usuários a sala possui
+        const totalCards = room.maxCards * countUsers; // Quantidade total de cartas
 
-        for (let x = 0; x < countUsers; x++) {
-          const recordUser = await PrismaService.user.findUnique({
-            where: { id: userIdList[0].id },
-          });
-          totalCards += recordUser.cards.length;
+        if (countUsers < 2) {
+          // calculo do premio da sala
+          user.wallet = room.price * 5;
+        } else {
+          user.wallet = totalCards * room.price;
         }
-
-        const roomPrize = await AwardUser(room, totalCards); // , room);
-        user.wallet += roomPrize;
 
         const data: Prisma.UserUpdateInput = user;
 
-        this.prisma.user.update({ data, where: { id: user.id } });
+        await this.prisma.user
+          .update({ data, where: { id: user.id } })
+          .catch(handleError); // Atualiza no banco
 
-        return {
-          message: `O ${user.name} foi o campeão da rodada por KnockOut!`,
-        };
-      } else {
-        const cards = await this.prisma.card.findMany({
-          where: { userID: user.id },
+        await this.prisma.room
+          .delete({ where: { id: room.id } })
+          .catch(handleError);
+        room.users.forEach(async (user) => {
+          await this.prisma.card
+            .deleteMany({ where: { id: user.id } })
+            .catch(handleError);
         });
 
-        const deletedCardId = PunishUser(cards);
-
-        await this.prisma.card.delete({ where: { id: deletedCardId } });
-
-        return { message: `${user.name} declarou bingo em falso!` };
+        return user.id, user.name, room.id, room.historic, card.id;
       }
     });
+    if (!KO) {
+      const cards = await this.prisma.card
+        .findMany({
+          // Pega todas as cartelas do usuário
+          where: { userID: user.id },
+        })
+        .catch(handleError);
+
+      const deletedCardId = PunishUser(cards); // função que escolhe uma cartela para deletar
+
+      await this.prisma.card
+        .delete({ where: { id: deletedCardId } })
+        .catch(handleError); // deleta a cartela escolhida.
+
+      return user.id, user.name, room.id, room.historic;
+    }
   }
 
   async delete(id: string) {
+    const room: Room = await this.prisma.room
+      .findUnique({ where: { id } })
+      .catch(handleError);
+    room.users.forEach(async (user) => {
+      await this.prisma.card
+        .deleteMany({ where: { id: user.id } })
+        .catch(handleError);
+    });
     await this.prisma.room.delete({ where: { id: id } }).catch(handleError);
-    return { message: 'Você saiu da partida!' };
+    throw new HttpException('', 200);
   }
 }

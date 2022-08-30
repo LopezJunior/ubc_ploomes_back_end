@@ -10,7 +10,7 @@ export class CardService {
   constructor(private readonly prisma: PrismaService) {}
 
   async create(user: User) {
-    const generateCard = CreateCard();   
+    const generateCard = CreateCard();
 
     const data: Prisma.CardCreateInput = {
       user: {
@@ -38,10 +38,13 @@ export class CardService {
   }
 
   async remove(userID: string) {
-    const userCards = await this.prisma.user.findUnique({where:{id:userID},select:{cards:true}});
+    const userCards = await this.prisma.user.findUnique({
+      where: { id: userID },
+      select: { cards: true },
+    });
 
-    const y = Math.ceil(Math.random() * userCards.cards.length); 
-    await this.prisma.card.delete({ where: { id:userCards.cards[y].id} });
-    throw new HttpException('Card deletado com sucesso!', 200);     
+    const y = Math.ceil(Math.random() * userCards.cards.length);
+    await this.prisma.card.delete({ where: { id: userCards.cards[y].id } });
+    throw new HttpException('Card deletado com sucesso!', 200);
   }
 }
