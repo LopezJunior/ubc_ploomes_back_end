@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, Injectable } from '@nestjs/common';
 import { Prisma } from '@prisma/client';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { User } from 'src/User/entities/user.entity';
@@ -11,22 +11,6 @@ export class CardService {
 
   async create(user: User) {
     const generateCard = CreateCard();
-
-    const priceCard = await this.prisma.user
-      .findUnique({
-        where: { id: user.id },
-        select: { room: { select: { price: true } } },
-      })
-      .catch(handleError);
-
-    await this.prisma.user
-      .update({
-        where: { id: user.id },
-        data: {
-          wallet: user.wallet - priceCard.room.price,
-        },
-      })
-      .catch(handleError);
 
     const data: Prisma.CardCreateInput = {
       user: {
@@ -43,7 +27,7 @@ export class CardService {
         select: {
           user: {
             select: {
-              name: true,
+              id: true,
             },
           },
           id: true,
@@ -53,26 +37,14 @@ export class CardService {
       .catch(handleError);
   }
 
-  //   async remove(user: User, id: string) {
-  //     const room = await this.prisma.user.findUnique({
-  //       where: { id: user.id },
-  //       select: { room: true },
-  //     }).catch(handleError);
+  async remove(userID: string) {
+    const userCards = await this.prisma.user.findUnique({
+      where: { id: userID },
+      select: { cards: true },
+    });
 
-  //     const reversalValue = await this.prisma.room.findUnique({
-  //       where: { id: room.room.id },
-  //       select: { price: true },
-  //     }).catch(handleError);
-
-  //     await this.prisma.user.update({
-  //       where: { id: user.id },
-  //       data: {
-  //         wallet: {
-  //           increment: reversalValue.price,
-  //         },
-  //       },
-  //     }).catch(handleError);
-
-  //     return this.prisma.card.delete({ where: { id: id } }).catch(handleError);
-  //   }
+    const y = Math.ceil(Math.random() * userCards.cards.length);
+    await this.prisma.card.delete({ where: { id: userCards.cards[y].id } });
+    throw new HttpException('Card deletado com sucesso!', 200);
+  }
 }
