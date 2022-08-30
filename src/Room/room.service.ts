@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, Injectable } from '@nestjs/common';
 import { Prisma, User } from '@prisma/client';
 import { CardService } from 'src/card/card.service';
 import { PrismaService } from 'src/prisma/prisma.service';
@@ -28,7 +28,7 @@ export class RoomService {
     for (let x = 0; x < roomList.length; x++) {
       if (roomList[x].number == numberGenerate) {
         numberGenerate++;
-        x--;
+        x = 0;
       }
     }
 
@@ -152,16 +152,6 @@ export class RoomService {
         // se o usuário ganhar...
         const countUsers = room.users.length; // contar quantos usuários a sala possui
         const totalCards = room.maxCards * countUsers; // Quantidade total de cartas
-        // const userIdList = room.users;
-
-        // for (let x = 0; x < countUsers; x++) {
-        //   const recordUser = await PrismaService.user.findUnique({
-        //     where: { id: userIdList[0].id },
-        //   });
-        //   totalCards += recordUser.cards.length;
-        // }
-
-        // const roomPrize = await AwardUser(room, totalCards);
 
         if (countUsers < 2) {
           // calculo do premio da sala
@@ -216,6 +206,6 @@ export class RoomService {
         .catch(handleError);
     });
     await this.prisma.room.delete({ where: { id: id } }).catch(handleError);
-    return { message: 'Você saiu da partida!' };
+    throw new HttpException('', 200);
   }
 }
