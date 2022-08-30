@@ -1,5 +1,6 @@
 import {
   BadRequestException,
+  HttpException,
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
@@ -44,13 +45,15 @@ export class UsersService {
   }
 
   async filterByMoney() {
-    const richest_list = await this.prisma.user.findMany({
-      select: {
-        id: true,
-        name: true,
-        wallet: true,
-      },
-    });
+    const richest_list = await this.prisma.user
+      .findMany({
+        select: {
+          id: true,
+          name: true,
+          wallet: true,
+        },
+      })
+      .catch(handleError);
 
     richest_list.sort((a, b) => {
       return a.wallet - b.wallet;
@@ -60,13 +63,15 @@ export class UsersService {
   }
 
   async filterByWins() {
-    const winners_list = await this.prisma.user.findMany({
-      select: {
-        id: true,
-        name: true,
-        wins: true,
-      },
-    });
+    const winners_list = await this.prisma.user
+      .findMany({
+        select: {
+          id: true,
+          name: true,
+          wins: true,
+        },
+      })
+      .catch(handleError);
 
     winners_list.sort((a, b) => {
       return a.wins - b.wins;
@@ -76,14 +81,17 @@ export class UsersService {
   }
 
   async findOne(id: string) {
-    const record = await this.prisma.user.findUnique({
-      where: { id },
-      select: {
-        id: true,
-        name: true,
-        password: false,
-      },
-    });
+    const record = await this.prisma.user
+      .findUnique({
+        where: { id },
+        select: {
+          id: true,
+          name: true,
+          password: false,
+        },
+      })
+      .catch(handleError);
+
 
     if (!record) {
       throw new NotFoundException(`Registro com id '${id}' não encontrado.`);
@@ -93,9 +101,11 @@ export class UsersService {
 
   async profile(user: User) {
     const id = user.id;
-    return await this.prisma.user.findUnique({
-      where: { id },
-    });
+    return await this.prisma.user
+      .findUnique({
+        where: { id },
+      })
+      .catch(handleError);
   }
 
   async update(user: User, updateUserDto: UpdateUserDto) {
@@ -118,13 +128,20 @@ export class UsersService {
       .update({
         where: { id },
         data,
-        select: { id: true, name: true, password: false },
+        select: { 
+          id: true, 
+          name: true, 
+          password: false,
+          createdAt: true,
+          updatedAt: true, 
+        },
       })
       .catch(handleError);
   }
 
   async delete(user: User) {
     const id = user.id;
-    return await this.prisma.user.delete({ where: { id } }).catch(handleError);
-  }
+    await this.prisma.user.delete({ where: { id }}).catch(handleError);    
+    throw new HttpException('Usuário deletado com sucesso!', 200);
+  }    
 }
