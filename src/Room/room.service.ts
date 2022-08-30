@@ -139,6 +139,7 @@ export class RoomService {
     const room = dto.room;
     const cards = dto.cards;
     const prizeDraw = dto.room.historic; // lista de bolas já sorteadas
+    let KO: boolean;
 
     cards.forEach(async (card) => {
       const markedNumbers = card.markings; // Numeros marcados da cartela
@@ -148,7 +149,7 @@ export class RoomService {
 
       const mapIndex = CrossMap(cardNumbers, prizeNumbers); // Indices das marcações válidas na cartela
 
-      const KO = CheckBingo(mapIndex); // Boolean de validação do bingo
+      KO = CheckBingo(mapIndex); // Boolean de validação do bingo
 
       if (KO) {
         // se o usuário ganhar...
@@ -179,23 +180,24 @@ export class RoomService {
           .catch(handleError); // Atualiza no banco
 
         return user.id, user.name, room.id, room.historic, card.id;
-      } else {
-        const cards = await this.prisma.card
-          .findMany({
-            // Pega todas as cartelas do usuário
-            where: { userID: user.id },
-          })
-          .catch(handleError);
-
-        const deletedCardId = PunishUser(cards); // função que escolhe uma cartela para deletar
-
-        await this.prisma.card
-          .delete({ where: { id: deletedCardId } })
-          .catch(handleError); // deleta a cartela escolhida.
-
-        return user.id, user.name, room.id, room.historic;
       }
     });
+    if (!KO) {
+      const cards = await this.prisma.card
+        .findMany({
+          // Pega todas as cartelas do usuário
+          where: { userID: user.id },
+        })
+        .catch(handleError);
+
+      const deletedCardId = PunishUser(cards); // função que escolhe uma cartela para deletar
+
+      await this.prisma.card
+        .delete({ where: { id: deletedCardId } })
+        .catch(handleError); // deleta a cartela escolhida.
+
+      return user.id, user.name, room.id, room.historic;
+    }
   }
 
   async delete(id: string) {
