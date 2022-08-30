@@ -10,6 +10,7 @@ import { PrizeDraw } from 'src/Utils/prizeDraw-util';
 import { PunishUser } from 'src/Utils/punishUser - util';
 import { checkBingoDto } from './dto/checkBingo.dto';
 import { CreateRoomDto } from './dto/create-room.dto';
+import { Room } from './entities/room-entity';
 
 @Injectable()
 export class RoomService {
@@ -132,14 +133,10 @@ export class RoomService {
   }
 
   async checkBingo(user: User, dto: checkBingoDto) {
-    // const room = await this.prisma.room.findUnique({
-    //   where: { id: roomId },
-    //   include: { users: true },
-    // });
     const room = dto.room;
     const cards = dto.cards;
     const prizeDraw = dto.room.historic; // lista de bolas já sorteadas
-    let KO: boolean;
+    let KO: boolean; // KnockOut, variável da vitória
 
     cards.forEach(async (card) => {
       const markedNumbers = card.markings; // Numeros marcados da cartela
@@ -175,9 +172,18 @@ export class RoomService {
 
         const data: Prisma.UserUpdateInput = user;
 
-        this.prisma.user
+        await this.prisma.user
           .update({ data, where: { id: user.id } })
           .catch(handleError); // Atualiza no banco
+
+        await this.prisma.room
+          .delete({ where: { id: room.id } })
+          .catch(handleError);
+        room.users.forEach(async (user) => {
+          await this.prisma.card
+            .deleteMany({ where: { id: user.id } })
+            .catch(handleError);
+        });
 
         return user.id, user.name, room.id, room.historic, card.id;
       }
@@ -201,6 +207,14 @@ export class RoomService {
   }
 
   async delete(id: string) {
+    const room: Room = await this.prisma.room
+      .findUnique({ where: { id } })
+      .catch(handleError);
+    room.users.forEach(async (user) => {
+      await this.prisma.card
+        .deleteMany({ where: { id: user.id } })
+        .catch(handleError);
+    });
     await this.prisma.room.delete({ where: { id: id } }).catch(handleError);
     return { message: 'Você saiu da partida!' };
   }
