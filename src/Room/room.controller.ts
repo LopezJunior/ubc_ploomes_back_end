@@ -20,7 +20,6 @@ import { RoomService } from './room.service';
 @UseGuards(AuthGuard())
 @ApiBearerAuth()
 @Controller('room')
-
 export class RoomController {
   constructor(private readonly roomService: RoomService) {}
 

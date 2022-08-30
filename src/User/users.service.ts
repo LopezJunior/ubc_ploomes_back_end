@@ -92,7 +92,6 @@ export class UsersService {
       })
       .catch(handleError);
 
-
     if (!record) {
       throw new NotFoundException(`Registro com id '${id}' não encontrado.`);
     }
@@ -128,12 +127,12 @@ export class UsersService {
       .update({
         where: { id },
         data,
-        select: { 
-          id: true, 
-          name: true, 
+        select: {
+          id: true,
+          name: true,
           password: false,
           createdAt: true,
-          updatedAt: true, 
+          updatedAt: true,
         },
       })
       .catch(handleError);
@@ -141,7 +140,7 @@ export class UsersService {
 
   async delete(user: User) {
     const id = user.id;
-    await this.prisma.user.delete({ where: { id }}).catch(handleError);    
+    await this.prisma.user.delete({ where: { id } }).catch(handleError);
     throw new HttpException('Usuário deletado com sucesso!', 200);
-  }    
+  }
 }
