@@ -143,4 +143,13 @@ export class UsersService {
     await this.prisma.user.delete({ where: { id } }).catch(handleError);
     throw new HttpException('Usuário deletado com sucesso!', 200);
   }
+
+  async ad(user: User) {
+    user.wallet += 100;
+
+    const data: any = user;
+    await this.prisma.user.update({ where: { id: user.id }, data });
+
+    return { message: 'Você conquistou mais 100 moedas.' };
+  }
 }
