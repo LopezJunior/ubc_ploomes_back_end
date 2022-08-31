@@ -56,7 +56,7 @@ export class UsersService {
       .catch(handleError);
 
     richest_list.sort((a, b) => {
-      return a.wallet - b.wallet;
+      return b.wallet - a.wallet;
     });
 
     return richest_list;
@@ -74,7 +74,7 @@ export class UsersService {
       .catch(handleError);
 
     winners_list.sort((a, b) => {
-      return a.wins - b.wins;
+      return b.wins - a.wins;
     });
 
     return winners_list;
@@ -91,7 +91,6 @@ export class UsersService {
         },
       })
       .catch(handleError);
-
 
     if (!record) {
       throw new NotFoundException(`Registro com id '${id}' não encontrado.`);
@@ -128,12 +127,12 @@ export class UsersService {
       .update({
         where: { id },
         data,
-        select: { 
-          id: true, 
-          name: true, 
+        select: {
+          id: true,
+          name: true,
           password: false,
           createdAt: true,
-          updatedAt: true, 
+          updatedAt: true,
         },
       })
       .catch(handleError);
@@ -141,7 +140,16 @@ export class UsersService {
 
   async delete(user: User) {
     const id = user.id;
-    await this.prisma.user.delete({ where: { id }}).catch(handleError);    
+    await this.prisma.user.delete({ where: { id } }).catch(handleError);
     throw new HttpException('Usuário deletado com sucesso!', 200);
-  }    
+  }
+
+  async ad(user: User) {
+    user.wallet += 100;
+
+    const data: any = user;
+    await this.prisma.user.update({ where: { id: user.id }, data });
+
+    return { message: 'Você conquistou mais 100 moedas.' };
+  }
 }
