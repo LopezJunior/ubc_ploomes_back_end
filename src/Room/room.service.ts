@@ -150,15 +150,15 @@ export class RoomService {
 
       if (KO) {
         // se o usuário ganhar...
-        const countUsers = room.users.length; // contar quantos usuários a sala possui
-        const totalCards = room.maxCards * countUsers; // Quantidade total de cartas
+        // const countUsers = room.users.length; // contar quantos usuários a sala possui
+        // const totalCards = room.maxCards * countUsers; // Quantidade total de cartas
 
-        if (countUsers < 2) {
-          // calculo do premio da sala
-          user.wallet = room.price * 5;
-        } else {
-          user.wallet = totalCards * room.price;
-        }
+        // if (countUsers < 2) {
+        // calculo do premio da sala
+        user.wallet = room.price * 5;
+        // } else {
+        //   user.wallet = totalCards * room.price;
+        // }
 
         const data: Prisma.UserUpdateInput = user;
 
