@@ -175,7 +175,7 @@ export class RoomService {
             .catch(handleError);
         });
 
-        return user.id, user.name, room.id, room.historic, card.id;
+        return { KO, user, room, card };
       }
     });
     if (!KO) {
@@ -186,13 +186,18 @@ export class RoomService {
         })
         .catch(handleError);
 
-      const deletedCardId = PunishUser(cards); // função que escolhe uma cartela para deletar
+      if (cards.length < 2) {
+        // Se o usuário tiver apenas uma cartela
+        return { KO, user, room };
+      } else {
+        const deletedCardId = PunishUser(cards); // função que escolhe uma cartela para deletar
 
-      await this.prisma.card
-        .delete({ where: { id: deletedCardId } })
-        .catch(handleError); // deleta a cartela escolhida.
+        await this.prisma.card
+          .delete({ where: { id: deletedCardId } })
+          .catch(handleError); // deleta a cartela escolhida.
 
-      return user.id, user.name, room.id, room.historic;
+        return { KO, deletedCardId, user, room };
+      }
     }
   }
 
