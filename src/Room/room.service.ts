@@ -201,16 +201,11 @@ export class RoomService {
     }
   }
 
-  async delete(id: string) {
-    const room: Room = await this.prisma.room
-      .findUnique({ where: { id } })
+  async delete(userId: string, roomId: string) {
+    await this.prisma.card
+      .deleteMany({ where: { id: userId } })
       .catch(handleError);
-    room.users.forEach(async (user) => {
-      await this.prisma.card
-        .deleteMany({ where: { id: user.id } })
-        .catch(handleError);
-    });
-    await this.prisma.room.delete({ where: { id: id } }).catch(handleError);
-    throw new HttpException('', 200);
+
+    await this.prisma.room.delete({ where: { id: roomId } }).catch(handleError);
   }
 }
