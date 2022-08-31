@@ -1,4 +1,4 @@
-import { HttpException, UnprocessableEntityException } from '@nestjs/common';
+import { HttpException } from '@nestjs/common';
 
 export function handleError(error: Error): undefined {
   const errorLines = error.message?.split('\n');

@@ -166,12 +166,12 @@ export class RoomService {
           .update({ data, where: { id: user.id } })
           .catch(handleError); // Atualiza no banco
 
-        await this.prisma.room
-          .delete({ where: { id: room.id } })
-          .catch(handleError);
-
         await this.prisma.card
           .deleteMany({ where: { id: user.id } })
+          .catch(handleError);
+
+        await this.prisma.room
+          .delete({ where: { id: room.id } })
           .catch(handleError);
 
         return { KO, user, room, card };
