@@ -56,7 +56,7 @@ export class UsersService {
       .catch(handleError);
 
     richest_list.sort((a, b) => {
-      return a.wallet - b.wallet;
+      return b.wallet - a.wallet;
     });
 
     return richest_list;
@@ -74,7 +74,7 @@ export class UsersService {
       .catch(handleError);
 
     winners_list.sort((a, b) => {
-      return a.wins - b.wins;
+      return b.wins - a.wins;
     });
 
     return winners_list;
