@@ -1,4 +1,4 @@
-import { HttpException, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { Prisma, User } from '@prisma/client';
 import { CardService } from 'src/card/card.service';
 import { PrismaService } from 'src/prisma/prisma.service';
@@ -10,7 +10,6 @@ import { PrizeDraw } from 'src/Utils/prizeDraw-util';
 import { PunishUser } from 'src/Utils/punishUser - util';
 import { checkBingoDto } from './dto/checkBingo.dto';
 import { CreateRoomDto } from './dto/create-room.dto';
-import { Room } from './entities/room-entity';
 
 @Injectable()
 export class RoomService {
@@ -201,7 +200,7 @@ export class RoomService {
     }
   }
 
-  async delete(userId: string, roomId: string) {
+  async endGame(userId: string, roomId: string) {
     await this.prisma.card
       .deleteMany({ where: { id: userId } })
       .catch(handleError);

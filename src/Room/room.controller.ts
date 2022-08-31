@@ -69,7 +69,7 @@ export class RoomController {
     summary: 'Rota que exclui a sala após o término da partida',
   })
   @Delete('/:id/withdrawRoom')
-  delete(@LoggedUser() user: User, @Param('id') roomId: string) {
-    return this.roomService.delete(user.id, roomId);
+  endGame(@LoggedUser() user: User, @Param('id') roomId: string) {
+    return this.roomService.endGame(user.id, roomId);
   }
 }
