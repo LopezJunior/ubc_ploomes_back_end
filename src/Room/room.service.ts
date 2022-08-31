@@ -140,6 +140,7 @@ export class RoomService {
 
     cards.forEach(async (card) => {
       const markedNumbers = card.markings; // Numeros marcados da cartela
+
       const cardNumbers = card.vetor;
 
       const prizeNumbers = Compare(prizeDraw, markedNumbers); // Numeros marcados corretamente
@@ -169,11 +170,10 @@ export class RoomService {
         await this.prisma.room
           .delete({ where: { id: room.id } })
           .catch(handleError);
-        room.users.forEach(async (user) => {
-          await this.prisma.card
-            .deleteMany({ where: { id: user.id } })
-            .catch(handleError);
-        });
+
+        await this.prisma.card
+          .deleteMany({ where: { id: user.id } })
+          .catch(handleError);
 
         return { KO, user, room, card };
       }
