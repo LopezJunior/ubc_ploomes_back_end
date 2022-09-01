@@ -39,6 +39,7 @@ export class RoomService {
       limitUsers: dto.limitUsers,
       price: 10 * dto.maxCards,
       frequency: dto.frequency,
+      historic: [],
       users: {
         connect: {
           id: user.id,
@@ -152,7 +153,7 @@ export class RoomService {
         KO = CheckBingo(mapIndex); // Boolean de validação do bingo
 
         if (KO) {
-          user.wallet = room.price * 5;
+          user.wallet += room.price * 5;
 
           const data: Prisma.UserUpdateInput = user;
 
