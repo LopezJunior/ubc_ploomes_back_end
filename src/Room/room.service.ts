@@ -152,7 +152,7 @@ export class RoomService {
         KO = CheckBingo(mapIndex); // Boolean de validação do bingo
 
         if (KO) {
-          user.wallet = room.price * 5;
+          user.wallet += room.price * 5;
 
           const data: Prisma.UserUpdateInput = user;
 
