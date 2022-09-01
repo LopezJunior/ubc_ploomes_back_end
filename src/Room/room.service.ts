@@ -169,18 +169,18 @@ export class RoomService {
       KO = false;
     }
     if (!KO) {
-      const cards = await this.prisma.card
+      const cardList = await this.prisma.card
         .findMany({
           // Pega todas as cartelas do usuário
           where: { userID: user.id },
         })
         .catch(handleError);
 
-      if (cards.length < 2) {
+      if (cardList.length < 2) {
         // Se o usuário tiver apenas uma cartela
         return { KO, user, room };
       } else {
-        const deletedCardId = PunishUser(cards); // função que escolhe uma cartela para deletar
+        const deletedCardId = PunishUser(cardList); // função que escolhe uma cartela para deletar
 
         await this.prisma.card
           .delete({ where: { id: deletedCardId } })
