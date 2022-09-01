@@ -1,4 +1,4 @@
-import { HttpException, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { Prisma, User } from '@prisma/client';
 import { CardService } from 'src/card/card.service';
 import { PrismaService } from 'src/prisma/prisma.service';
@@ -10,7 +10,6 @@ import { PrizeDraw } from 'src/Utils/prizeDraw-util';
 import { PunishUser } from 'src/Utils/punishUser - util';
 import { checkBingoDto } from './dto/checkBingo.dto';
 import { CreateRoomDto } from './dto/create-room.dto';
-import { Room } from './entities/room-entity';
 
 @Injectable()
 export class RoomService {
@@ -138,46 +137,43 @@ export class RoomService {
     const prizeDraw = dto.room.historic; // lista de bolas já sorteadas
     let KO: boolean; // KnockOut, variável da vitória
 
-    cards.forEach(async (card) => {
-      const markedNumbers = card.markings; // Numeros marcados da cartela
-      const cardNumbers = card.vetor;
+    if (cards.length > 0) {
+      for (let x = 0; x < cards.length; x++) {
+        const card = cards[x];
 
-      const prizeNumbers = Compare(prizeDraw, markedNumbers); // Numeros marcados corretamente
+        const markedNumbers = card.markings; // Numeros marcados da cartela
 
-      const mapIndex = CrossMap(cardNumbers, prizeNumbers); // Indices das marcações válidas na cartela
+        const cardNumbers = card.vetor;
 
-      KO = CheckBingo(mapIndex); // Boolean de validação do bingo
+        const prizeNumbers = Compare(prizeDraw, markedNumbers); // Numeros marcados corretamente
 
-      if (KO) {
-        // se o usuário ganhar...
-        const countUsers = room.users.length; // contar quantos usuários a sala possui
-        const totalCards = room.maxCards * countUsers; // Quantidade total de cartas
+        const mapIndex = CrossMap(cardNumbers, prizeNumbers); // Indices das marcações válidas na cartela
 
-        if (countUsers < 2) {
-          // calculo do premio da sala
+        KO = CheckBingo(mapIndex); // Boolean de validação do bingo
+
+        if (KO) {
           user.wallet = room.price * 5;
-        } else {
-          user.wallet = totalCards * room.price;
-        }
 
-        const data: Prisma.UserUpdateInput = user;
+          const data: Prisma.UserUpdateInput = user;
 
-        await this.prisma.user
-          .update({ data, where: { id: user.id } })
-          .catch(handleError); // Atualiza no banco
+          await this.prisma.user
+            .update({ data, where: { id: user.id } })
+            .catch(handleError); // Atualiza no banco
 
-        await this.prisma.room
-          .delete({ where: { id: room.id } })
-          .catch(handleError);
-        room.users.forEach(async (user) => {
           await this.prisma.card
             .deleteMany({ where: { id: user.id } })
             .catch(handleError);
-        });
 
-        return { KO, user, room, card };
+          await this.prisma.room
+            .delete({ where: { id: room.id } })
+            .catch(handleError);
+
+          return { KO, user, room, card };
+        }
       }
-    });
+    } else {
+      KO = false;
+    }
     if (!KO) {
       const cards = await this.prisma.card
         .findMany({
@@ -201,16 +197,11 @@ export class RoomService {
     }
   }
 
-  async delete(id: string) {
-    const room: Room = await this.prisma.room
-      .findUnique({ where: { id } })
+  async endGame(userId: string, roomId: string) {
+    await this.prisma.card
+      .deleteMany({ where: { id: userId } })
       .catch(handleError);
-    room.users.forEach(async (user) => {
-      await this.prisma.card
-        .deleteMany({ where: { id: user.id } })
-        .catch(handleError);
-    });
-    await this.prisma.room.delete({ where: { id: id } }).catch(handleError);
-    throw new HttpException('', 200);
+
+    await this.prisma.room.delete({ where: { id: roomId } }).catch(handleError);
   }
 }
