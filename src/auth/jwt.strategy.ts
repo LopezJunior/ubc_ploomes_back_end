@@ -20,7 +20,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
 
     if (!user) {
       throw new UnauthorizedException(
-        'Either the user doesn`t exist or is not authenticated',
+        'Usuário não existe ou não está autenticado.',
       );
     }
 
