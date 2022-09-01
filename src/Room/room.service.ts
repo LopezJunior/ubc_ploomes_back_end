@@ -39,6 +39,7 @@ export class RoomService {
       limitUsers: dto.limitUsers,
       price: 10 * dto.maxCards,
       frequency: dto.frequency,
+      historic: [],
       users: {
         connect: {
           id: user.id,
