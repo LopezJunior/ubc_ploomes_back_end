@@ -5,7 +5,7 @@ import { Server } from 'socket.io';
 import { AppModule } from './app.module';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule, { cors: {origin: ['http://localhost:3000', 'https://ploomes-dev.vercel.app']} });
+  const app = await NestFactory.create(AppModule, { cors: {origin: ['http://localhost:3000', 'https://ultimatebingochampionship.vercel.app']} });
 
   app.useGlobalPipes(new ValidationPipe());
 
