@@ -35,7 +35,6 @@ model Room {
   limitUsers     Int?      @default(1)
   prizeOrder     Int[]
   price          Float?
-  //rules enum
   historic       Int[]
   frequency      Int?      @default(10)
   createdAt      DateTime? @default(now()) @map("created_at")

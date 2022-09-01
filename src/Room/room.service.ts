@@ -53,19 +53,12 @@ export class RoomService {
     const room = await this.prisma.room.create({ data }).catch(handleError);
     //
 
-    const cardPrice = await this.prisma.room
-      .findUnique({
-        where: { id: room.id },
-        select: {
-          price: true,
-        },
-      })
-      .catch(handleError);
+    const cardPrice = room.price;
 
     // Verifica se o usuário tem dinheiro suficiente
     let validTransaction;
 
-    if (user.wallet < cardPrice.price) {
+    if (user.wallet < cardPrice) {
       validTransaction = false;
     } else {
       validTransaction = true;
