@@ -8,7 +8,7 @@ no ranking dos jogadores mais ricos. Versão disponível para teste!
 ## Deploy da aplicação [clicando aqui](https://ploomes-dev.vercel.app/login)
 
 ```
-https://ploomes-dev.vercel.app/login
+https://ultimatebingochampionship.vercel.app/
 ```
 ## Swagger [clicando aqui](https://ubc-backend.herokuapp.com/api/)
 
