@@ -1,4 +1,4 @@
-import { UnprocessableEntityException } from '@nestjs/common';
+import { HttpException } from '@nestjs/common';
 
 export function handleError(error: Error): undefined {
   const errorLines = error.message?.split('\n');
@@ -8,7 +8,8 @@ export function handleError(error: Error): undefined {
     console.error(error);
   }
 
-  throw new UnprocessableEntityException(
+  throw new HttpException(
     lastErrorLine || 'Algum erro ocorreu ao executar a operação',
+    500,
   );
 }

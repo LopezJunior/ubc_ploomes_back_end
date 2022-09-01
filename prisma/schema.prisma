@@ -1,11 +1,10 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
 
 generator client {
-  provider = "prisma-client-js"
+  provider = "prisma-client-js" 
 }
 
-datasource db {
+datasource db { 
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
@@ -28,7 +27,7 @@ model User {
 
 model Room {
   id             String    @id @default(uuid())
-  number         Int?
+  number         Int
   users          User[]
   maxCards       Int?      @default(2) // número de cartelas compradas
   limitPrizeDraw Int?      @default(50) // limite de sorteios
@@ -36,7 +35,6 @@ model Room {
   limitUsers     Int?      @default(1)
   prizeOrder     Int[]
   price          Float?
-  //rules enum
   historic       Int[]
   frequency      Int?      @default(10)
   createdAt      DateTime? @default(now()) @map("created_at")

@@ -33,7 +33,8 @@ export class CreateUserDto {
   })
   @IsNotEmpty()
   @ApiProperty({
-    description: 'Senha do usuário. Requer letras maiúsculas e minúsculas, números ou caracters especial',
+    description:
+      'Senha do usuário. Requer letras maiúsculas e minúsculas, números ou caracters especial',
     example: 'Blue@123',
   })
   password: string;

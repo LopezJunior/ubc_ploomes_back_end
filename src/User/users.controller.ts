@@ -89,4 +89,15 @@ export class UsersController {
   delete(@LoggedUser() user: User) {
     return this.usersService.delete(user);
   }
+
+  @ApiTags('User')
+  @UseGuards(AuthGuard())
+  @ApiBearerAuth()
+  @Get('/ad')
+  @ApiOperation({
+    summary: 'Rota de ads. Usuário recebe 100 moedas',
+  })
+  ad(@LoggedUser() user: User) {
+    return this.usersService.ad(user);
+  }
 }

@@ -4,7 +4,7 @@ import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { AppModule } from './app.module';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule, { cors: true });
+  const app = await NestFactory.create(AppModule, { cors: {origin: ['http://localhost:3000', 'https://ultimatebingochampionship.vercel.app']} });
 
   app.useGlobalPipes(new ValidationPipe());
 
@@ -16,6 +16,7 @@ async function bootstrap() {
     .addTag('Auth')
     .addTag('User')
     .addTag('Room')
+    .addTag('Card')
     .addTag('Ranking')
     .addBearerAuth()
     .build();
@@ -23,6 +24,7 @@ async function bootstrap() {
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api', app, document);
 
+  app.enableCors();
   await app.listen(process.env.PORT || 3333);
 }
 bootstrap();
