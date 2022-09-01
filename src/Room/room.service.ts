@@ -137,46 +137,43 @@ export class RoomService {
     const prizeDraw = dto.room.historic; // lista de bolas já sorteadas
     let KO: boolean; // KnockOut, variável da vitória
 
-    cards.forEach(async (card) => {
-      const markedNumbers = card.markings; // Numeros marcados da cartela
+    if (cards.length > 0) {
+      for (let x = 0; x < cards.length; x++) {
+        const card = cards[x];
 
-      const cardNumbers = card.vetor;
+        const markedNumbers = card.markings; // Numeros marcados da cartela
 
-      const prizeNumbers = Compare(prizeDraw, markedNumbers); // Numeros marcados corretamente
+        const cardNumbers = card.vetor;
 
-      const mapIndex = CrossMap(cardNumbers, prizeNumbers); // Indices das marcações válidas na cartela
+        const prizeNumbers = Compare(prizeDraw, markedNumbers); // Numeros marcados corretamente
 
-      KO = CheckBingo(mapIndex); // Boolean de validação do bingo
+        const mapIndex = CrossMap(cardNumbers, prizeNumbers); // Indices das marcações válidas na cartela
 
-      if (KO) {
-        // se o usuário ganhar...
-        // const countUsers = room.users.length; // contar quantos usuários a sala possui
-        // const totalCards = room.maxCards * countUsers; // Quantidade total de cartas
+        KO = CheckBingo(mapIndex); // Boolean de validação do bingo
 
-        // if (countUsers < 2) {
-        // calculo do premio da sala
-        user.wallet = room.price * 5;
-        // } else {
-        //   user.wallet = totalCards * room.price;
-        // }
+        if (KO) {
+          user.wallet = room.price * 5;
 
-        const data: Prisma.UserUpdateInput = user;
+          const data: Prisma.UserUpdateInput = user;
 
-        await this.prisma.user
-          .update({ data, where: { id: user.id } })
-          .catch(handleError); // Atualiza no banco
+          await this.prisma.user
+            .update({ data, where: { id: user.id } })
+            .catch(handleError); // Atualiza no banco
 
-        await this.prisma.card
-          .deleteMany({ where: { id: user.id } })
-          .catch(handleError);
+          await this.prisma.card
+            .deleteMany({ where: { id: user.id } })
+            .catch(handleError);
 
-        await this.prisma.room
-          .delete({ where: { id: room.id } })
-          .catch(handleError);
+          await this.prisma.room
+            .delete({ where: { id: room.id } })
+            .catch(handleError);
 
-        return { KO, user, room, card };
+          return { KO, user, room, card };
+        }
       }
-    });
+    } else {
+      KO = false;
+    }
     if (!KO) {
       const cards = await this.prisma.card
         .findMany({
