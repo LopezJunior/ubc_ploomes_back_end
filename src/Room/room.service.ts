@@ -186,7 +186,7 @@ export class RoomService {
           .delete({ where: { id: deletedCardId } })
           .catch(handleError); // deleta a cartela escolhida.
 
-        return { KO, deletedCardId, user, room };
+        return { KO, deletedCardId, cards, user, room };
       }
     }
   }
