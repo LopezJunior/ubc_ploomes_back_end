@@ -53,19 +53,12 @@ export class RoomService {
     const room = await this.prisma.room.create({ data }).catch(handleError);
     //
 
-    const cardPrice = await this.prisma.room
-      .findUnique({
-        where: { id: room.id },
-        select: {
-          price: true,
-        },
-      })
-      .catch(handleError);
+    const cardPrice = room.price;
 
     // Verifica se o usuário tem dinheiro suficiente
     let validTransaction;
 
-    if (user.wallet < cardPrice.price) {
+    if (user.wallet < cardPrice) {
       validTransaction = false;
     } else {
       validTransaction = true;
@@ -176,24 +169,24 @@ export class RoomService {
       KO = false;
     }
     if (!KO) {
-      const cards = await this.prisma.card
+      const cardList = await this.prisma.card
         .findMany({
           // Pega todas as cartelas do usuário
           where: { userID: user.id },
         })
         .catch(handleError);
 
-      if (cards.length < 2) {
+      if (cardList.length < 2) {
         // Se o usuário tiver apenas uma cartela
         return { KO, user, room };
       } else {
-        const deletedCardId = PunishUser(cards); // função que escolhe uma cartela para deletar
+        const deletedCardId = PunishUser(cardList); // função que escolhe uma cartela para deletar
 
         await this.prisma.card
           .delete({ where: { id: deletedCardId } })
           .catch(handleError); // deleta a cartela escolhida.
 
-        return { KO, deletedCardId, user, room };
+        return { KO, deletedCardId, cards, user, room };
       }
     }
   }

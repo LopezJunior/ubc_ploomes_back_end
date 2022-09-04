@@ -1,8 +1,13 @@
 //CheckLines: função que checa se a linha está marcada,. índices de exemplo na cartela (0, 5, 10, 15, 20)
 
-// let indicesBolasMarcadas = [0, 1, 6, 11, 12, 16, 18, 21, 24]; //**Exemplo. vem da função crossMap
+// let mapIndex = [ 0, 1, 2, 3, 4, 5 ]; //**Exemplo. vem da função crossMap - Bingo Coluna
+// let mapIndex = [ 0, 5, 10, 15, 20 ]; //**Exemplo. vem da função crossMap - Bingo Linha
+// let mapIndex = [ 0, 6, 12, 18, 24 ]; //**Exemplo. vem da função crossMap - Bingo Diagonal 1
+// let mapIndex = [ 4, 8, 12, 16, 20 ]; //**Exemplo. vem da função crossMap - Bingo Diagonal 2
+// let mapIndex = [ 0, 1, 2, 7, 8, 9 ]; //**Exemplo. vem da função crossMap
+// let mapIndex = [ 0, 2, 4, 6, 8, 10 ]; //**Exemplo. vem da função crossMap
 
-// let bingo = CheckBingo(indicesBolasMarcadas);
+// let bingo = CheckBingo(mapIndex);
 
 // console.log(bingo);
 
